@@ -330,10 +330,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 40. 远程页可选禁止截屏
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P2
 - 标签：remote、security
-- 说明：设置里增加一个开关，默认关闭。打开后，只给远程页窗口加上 FLAG_SECURE，让截屏和最近任务里的这一页变模糊。其他页面不受影响。不要在日志里打印远程链接。本条只记账，本轮不实现。
+- 分支：`cursor/secure-remote-screen-8257`
+- 说明：设置里增加一个开关，默认关闭。打开后，只给远程页窗口加上 FLAG_SECURE，让截屏和最近任务里的这一页变模糊。其他页面不受影响。不要在日志里打印远程链接。压缩提交已在 `main` 的 `935ca9ab985f640447a0596b6aa331476d4da733`。Reviewer PASS 的 tip 是 `170acbb8b4db09dd7e220de4e71ab2caf2b1f819`。PR #29 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 下一步建议
 

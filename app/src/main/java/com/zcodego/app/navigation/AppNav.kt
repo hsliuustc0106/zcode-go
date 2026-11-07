@@ -48,6 +48,7 @@ import com.zcodego.app.ui.settings.SettingsScreen
 import com.zcodego.app.ui.web.FollowUpDraftFiles
 import com.zcodego.app.ui.web.FollowUpDrafts
 import com.zcodego.app.ui.web.OfficialDestination
+import com.zcodego.app.ui.web.RemoteWindowSecure
 import com.zcodego.app.ui.web.SessionSwitchLabel
 import com.zcodego.app.ui.web.WebOriginCleaner
 import com.zcodego.app.ui.web.WebScreen
@@ -322,6 +323,7 @@ fun AppNav(
         ) { entry ->
             val id = entry.arguments?.getString("sessionId").orEmpty()
             val sessions by controller.sessions.collectAsStateWithLifecycle()
+            val settings by controller.settings.collectAsStateWithLifecycle()
             val session = sessions.firstOrNull { it.id == id }
             val parsedOk = session != null && RemoteUrlPolicy.parseRemoteLink(session.url) is ParseResult.Ok
             if (session == null || !parsedOk) {
@@ -365,6 +367,10 @@ fun AppNav(
                             WebOriginCleaner.apply(plan)
                         }
                     },
+                    secureWindow = RemoteWindowSecure.shouldSecure(
+                        remoteSession = true,
+                        settingOn = settings?.secureRemoteScreen == true,
+                    ),
                 )
                 if (renamingFromTitle) {
                     RenameSessionDialog(

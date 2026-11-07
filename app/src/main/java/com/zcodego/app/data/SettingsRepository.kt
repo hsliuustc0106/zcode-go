@@ -58,6 +58,12 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
+    suspend fun setSecureRemoteScreen(enabled: Boolean) {
+        context.settingsDataStore.edit { prefs ->
+            prefs[Keys.SECURE_REMOTE_SCREEN] = enabled
+        }
+    }
+
     suspend fun setLastSessionId(id: String?) {
         context.settingsDataStore.edit { prefs ->
             if (id.isNullOrBlank()) {
@@ -74,6 +80,7 @@ class SettingsRepository(private val context: Context) {
             reopenLastSession = this[Keys.REOPEN_LAST] ?: true,
             themeMode = ThemeMode.fromStorage(this[Keys.THEME_MODE]),
             lastSessionId = this[Keys.LAST_SESSION_ID],
+            secureRemoteScreen = this[Keys.SECURE_REMOTE_SCREEN] ?: false,
         )
 
     private object Keys {
@@ -81,5 +88,6 @@ class SettingsRepository(private val context: Context) {
         val REOPEN_LAST = booleanPreferencesKey("reopen_last")
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val LAST_SESSION_ID = stringPreferencesKey("last_session_id")
+        val SECURE_REMOTE_SCREEN = booleanPreferencesKey("secure_remote_screen")
     }
 }

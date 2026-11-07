@@ -85,6 +85,8 @@
     <string name="settings_section_about">关于</string>
     <string name="settings_reopen">启动时打开上次会话</string>
     <string name="settings_reopen_sub">再次打开应用时，直接进入上次的远程页面</string>
+    <string name="settings_secure_remote">远程页禁止截屏</string>
+    <string name="settings_secure_remote_sub">打开后，只有远程页面在截屏和最近任务里变模糊。其他页面不受影响。默认关闭。</string>
     <string name="settings_theme_system">跟随系统</string>
     <string name="settings_theme_light">浅色</string>
     <string name="settings_theme_dark">深色</string>

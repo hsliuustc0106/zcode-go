@@ -200,6 +200,29 @@ fun SettingsScreen(
                     },
                 )
             }
+            Spacer(Modifier.height(12.dp))
+            androidx.compose.foundation.layout.Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.settings_secure_remote),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Text(
+                        text = stringResource(R.string.settings_secure_remote_sub),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Switch(
+                    checked = current.secureRemoteScreen,
+                    onCheckedChange = { enabled ->
+                        scope.launch { controller.setSecureRemoteScreen(enabled) }
+                    },
+                )
+            }
 
             Spacer(Modifier.height(28.dp))
             SectionTitle(stringResource(R.string.settings_section_data))

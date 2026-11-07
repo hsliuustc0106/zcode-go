@@ -28,6 +28,7 @@ data class AppSettings(
     val reopenLastSession: Boolean = true,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val lastSessionId: String? = null,
+    val secureRemoteScreen: Boolean = false,
 )
 
 /**

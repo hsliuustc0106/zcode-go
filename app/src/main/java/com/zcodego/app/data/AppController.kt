@@ -24,6 +24,8 @@ class AppController(
 
     suspend fun setReopenLastSession(enabled: Boolean) = settingsRepository.setReopenLastSession(enabled)
 
+    suspend fun setSecureRemoteScreen(enabled: Boolean) = settingsRepository.setSecureRemoteScreen(enabled)
+
     suspend fun saveLink(link: AcceptedRemoteLink): RemoteSession? {
         val session = sessionRepository.upsert(link) ?: return null
         settingsRepository.setLastSessionId(session.id)

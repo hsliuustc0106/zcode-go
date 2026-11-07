@@ -115,6 +115,7 @@ fun WebScreen(
     onDeleteSession: () -> Unit = {},
     onRenameTitle: (() -> Unit)? = null,
     keepAliveLabel: String = "",
+    secureWindow: Boolean = false,
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as ZCodeGoApp
@@ -129,6 +130,9 @@ fun WebScreen(
     var sawOffline by remember { mutableStateOf(false) }
     val reconnectShot = remember { ReconnectOnce.Holder() }
     val online = rememberNetworkAvailable()
+    if (keepAlive && secureWindow) {
+        RemoteSecureFlag()
+    }
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
     val blockedTemplate = stringResource(R.string.err_blocked)
     val blockedUnknown = stringResource(R.string.err_blocked_unknown)
