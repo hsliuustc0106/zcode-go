@@ -178,10 +178,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 21. 会话列表空状态扫码引导
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P1
 - 标签：remote、ux
-- 说明：远程模式下还没有已保存会话时，空状态给出「扫码或粘贴」入口和一句短说明。本条只记账，本轮不实现。
+- 分支：`cursor/empty-session-cta-8257`
+- 说明：远程模式下还没有已保存会话时，空状态给出「扫码或粘贴」入口和一句短说明。压缩提交已在 `main` 的 `ac66af4a9a8690b511a4b686848e26619117c6a8`。Reviewer PASS 的 tip 是 `171e52841e0f4edbf712fa1b3ac298f45fb6d44b`。PR #10 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 22. 关于页打开最新 Release
 

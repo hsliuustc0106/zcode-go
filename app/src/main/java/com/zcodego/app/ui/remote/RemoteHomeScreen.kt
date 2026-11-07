@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zcodego.app.R
@@ -106,7 +105,7 @@ fun RemoteHomeScreen(
                     )
                 }
             }
-            if (sessions.isEmpty()) {
+            if (RemoteEmptyState.showScanOrPaste(sessions.size)) {
                 item {
                     Column(modifier = Modifier.padding(top = 24.dp)) {
                         Text(
@@ -119,7 +118,11 @@ fun RemoteHomeScreen(
                             text = stringResource(R.string.remote_empty_body),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Start,
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        ZCodeButton(
+                            text = stringResource(R.string.remote_empty_cta),
+                            onClick = onPaste,
                         )
                     }
                 }

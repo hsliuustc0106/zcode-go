@@ -54,8 +54,9 @@
     <string name="scanner_no_camera">这台设备没有可用的相机，请改为粘贴链接</string>
 
     <string name="remote_title">远程主机</string>
-    <string name="remote_empty_title">还没有连接</string>
-    <string name="remote_empty_body">在桌面 ZCode 左下角打开「移动端远程控制」，用手机扫码或粘贴链接。命令仍由那台电脑执行。</string>
+    <string name="remote_empty_title">还没有保存的电脑</string>
+    <string name="remote_empty_body">在电脑上打开「移动端远程控制」，然后扫码或粘贴。命令仍在电脑上执行。</string>
+    <string name="remote_empty_cta">扫码或粘贴</string>
     <string name="remote_add_scan">扫描二维码</string>
     <string name="remote_add_paste">粘贴链接</string>
     <string name="remote_section">最近会话</string>
