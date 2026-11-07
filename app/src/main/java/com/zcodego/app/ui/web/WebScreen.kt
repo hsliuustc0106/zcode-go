@@ -134,6 +134,7 @@ fun WebScreen(
     val blockedTemplate = stringResource(R.string.err_blocked)
     val blockedUnknown = stringResource(R.string.err_blocked_unknown)
     val attentionSessionId = rememberUpdatedState(currentSessionId)
+    val attentionComputer = rememberUpdatedState(keepAliveLabel)
     val webView = remember(url) {
         if (!RemoteUrlPolicy.isAllowedNavigation(url)) {
             null
@@ -151,6 +152,7 @@ fun WebScreen(
                                 rawTitle = pageTitle,
                                 appInForeground = app.processInForeground.value,
                                 sessionId = attentionSessionId.value,
+                                computerName = attentionComputer.value,
                             )
                         }
                     },

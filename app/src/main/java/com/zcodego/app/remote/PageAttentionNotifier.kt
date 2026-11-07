@@ -19,15 +19,27 @@ object PageAttentionNotifier {
     private const val NOTIFICATION_ID = 42
     private var lastTitle: String? = null
 
-    fun onTitle(context: Context, rawTitle: String, appInForeground: Boolean, sessionId: String?) {
+    fun onTitle(
+        context: Context,
+        rawTitle: String,
+        appInForeground: Boolean,
+        sessionId: String?,
+        computerName: String?,
+    ) {
         val sanitized = PageAttention.sanitize(rawTitle)
         val notable = PageAttention.notableTitle(lastTitle, rawTitle, appInForeground)
         if (sanitized != null) lastTitle = sanitized
-        if (notable != null) show(context.applicationContext, notable, sessionId)
+        if (notable != null) show(context.applicationContext, notable, sessionId, computerName)
     }
 
-    private fun show(context: Context, title: String, sessionId: String?) {
-        val text = AttentionOpen.notificationText(title) ?: return
+    private fun show(context: Context, pageTitle: String, sessionId: String?, computerName: String?) {
+        val copy = AttentionNotice.copy(
+            fixedTitle = context.getString(R.string.attention_title),
+            pageTitle = pageTitle,
+            custom = computerName,
+            linkName = null,
+            fallback = context.getString(R.string.unnamed_device),
+        ) ?: return
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         if (Build.VERSION.SDK_INT >= 26) {
             manager.createNotificationChannel(
@@ -49,8 +61,8 @@ object PageAttentionNotifier {
         )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_z)
-            .setContentTitle(context.getString(R.string.attention_title))
-            .setContentText(text)
+            .setContentTitle(copy.title)
+            .setContentText(copy.body)
             .setContentIntent(open)
             .setAutoCancel(true)
             .setOnlyAlertOnce(true)
