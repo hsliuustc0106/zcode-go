@@ -39,4 +39,27 @@ class FollowUpDraftsTest {
         assertEquals("", restored.read("b"))
         assertEquals("FollowUpDrafts(sessions=1)", restored.toString())
     }
+
+    @Test
+    fun removingOneSessionLeavesTheOthers() {
+        val drafts = FollowUpDrafts.empty()
+            .write("home", "家里的跟进")
+            .write("office", "办公室的跟进")
+            .remove("home")
+        assertEquals("", drafts.read("home"))
+        assertEquals("办公室的跟进", drafts.read("office"))
+        assertFalse(drafts.toString().contains("跟进"))
+    }
+
+    @Test
+    fun clearingDropsEveryDraft() {
+        val drafts = FollowUpDrafts.empty()
+            .write("home", "家里的跟进")
+            .write("office", "办公室的跟进")
+            .clear()
+        assertEquals("", drafts.read("home"))
+        assertEquals("", drafts.read("office"))
+        assertEquals("FollowUpDrafts(sessions=0)", drafts.toString())
+        assertFalse(drafts.toString().contains("https://"))
+    }
 }

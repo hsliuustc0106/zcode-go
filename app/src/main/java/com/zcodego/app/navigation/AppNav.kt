@@ -95,6 +95,14 @@ fun AppNav(
         mutableStateOf(arrayListOf<String>())
     }
 
+    fun dropFollowUpDraft(sessionId: String) {
+        followUpDraftFlat = FollowUpDrafts.decode(followUpDraftFlat).remove(sessionId).encode()
+    }
+
+    fun dropAllFollowUpDrafts() {
+        followUpDraftFlat = FollowUpDrafts.empty().encode()
+    }
+
     fun showRejectedLink(reasonName: String, raw: String) {
         val route = Routes.pairing(autoScan = false)
         nav.navigate(route) { launchSingleTop = true }
@@ -197,6 +205,7 @@ fun AppNav(
                     }
                 },
                 onDeleteSession = { id ->
+                    dropFollowUpDraft(id)
                     scope.launch {
                         val plan = controller.deleteSession(id)
                         WebOriginCleaner.apply(plan)
@@ -225,6 +234,7 @@ fun AppNav(
                     }
                 },
                 onDeleteSession = { id ->
+                    dropFollowUpDraft(id)
                     scope.launch {
                         val plan = controller.deleteSession(id)
                         WebOriginCleaner.apply(plan)
@@ -286,6 +296,7 @@ fun AppNav(
                     nav.resetTo(if (mode == HostMode.LOCAL) Routes.LOCAL else Routes.REMOTE)
                 },
                 onOpenDocs = { nav.navigate(Routes.official(OfficialDestination.DOCS.route)) },
+                onSessionsCleared = { dropAllFollowUpDrafts() },
             )
         }
         composable(
@@ -322,6 +333,7 @@ fun AppNav(
                         nav.navigate(Routes.pairing(autoScan = false))
                     },
                     onDeleteSession = {
+                        dropFollowUpDraft(id)
                         scope.launch {
                             val plan = controller.deleteSession(id)
                             nav.popBackStack()

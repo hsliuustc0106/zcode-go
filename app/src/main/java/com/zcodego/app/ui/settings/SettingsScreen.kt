@@ -62,6 +62,7 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onHostModeChanged: (HostMode) -> Unit,
     onOpenDocs: () -> Unit,
+    onSessionsCleared: () -> Unit = {},
 ) {
     val settings by controller.settings.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
@@ -289,6 +290,7 @@ fun SettingsScreen(
                         confirmSessions = false
                         scope.launch {
                             val plan = controller.clearSessions()
+                            onSessionsCleared()
                             WebOriginCleaner.apply(plan)
                             snackbar.showSnackbar(clearedSessions)
                         }

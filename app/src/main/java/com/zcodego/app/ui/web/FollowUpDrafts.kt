@@ -15,6 +15,10 @@ internal class FollowUpDrafts private constructor(
         return FollowUpDrafts(next)
     }
 
+    fun remove(sessionId: String): FollowUpDrafts = write(sessionId, "")
+
+    fun clear(): FollowUpDrafts = empty()
+
     fun encode(): ArrayList<String> {
         val flat = ArrayList<String>(bySession.size * 2)
         bySession.forEach { (id, text) ->
