@@ -148,7 +148,7 @@
     <string name="attention_channel">远程页面更新</string>
     <string name="attention_title">远程页面有变化</string>
     <string name="net_offline">网络已断开。恢复后可以重新连接。桌面端 ZCode 也要保持在线。</string>
-    <string name="net_back">网络已恢复</string>
+    <string name="net_back">网络已恢复。如果没有连上，可以再点一次重新连接。</string>
     <string name="about_attention_limit">后台通知只根据网页标题变化做尽力提醒，并不能判断 Agent 是否在等你。官方页面没有给本应用单独的状态接口。保活通知只在你打开远程页面时出现，离开页面就会停。跟进条在页面外面，只在你点「填入焦点」时写入当前输入框，不会自动发送。</string>
     <string name="followup_open">跟进</string>
     <string name="followup_collapse">收起</string>

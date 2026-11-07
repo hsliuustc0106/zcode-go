@@ -117,6 +117,7 @@ fun WebScreen(
     var showSwitcher by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
     var sawOffline by remember { mutableStateOf(false) }
+    val reconnectShot = remember { ReconnectOnce.Holder() }
     val online = rememberNetworkAvailable()
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
     val blockedTemplate = stringResource(R.string.err_blocked)
@@ -190,6 +191,18 @@ fun WebScreen(
 
     LaunchedEffect(online) {
         if (!online) sawOffline = true
+    }
+
+    LaunchedEffect(online, fatal, keepAlive) {
+        if (!keepAlive) return@LaunchedEffect
+        val reloadable = fatal == null || fatal == FatalWebError.Load
+        val step = ReconnectOnce.step(reconnectShot.state, online, reloadable)
+        reconnectShot.state = step.state
+        if (!step.reconnect) return@LaunchedEffect
+        fatal = null
+        sawOffline = false
+        loading = true
+        webView.loadUrl(url)
     }
 
     DisposableEffect(keepAlive, title) {
