@@ -50,6 +50,7 @@ import com.zcodego.app.data.HostMode
 import com.zcodego.app.data.ThemeMode
 import com.zcodego.app.ui.components.HostOptionCard
 import com.zcodego.app.ui.web.WebDataCleaner
+import com.zcodego.app.ui.web.WebOriginCleaner
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -262,7 +263,8 @@ fun SettingsScreen(
                     onClick = {
                         confirmSessions = false
                         scope.launch {
-                            controller.clearSessions()
+                            val plan = controller.clearSessions()
+                            WebOriginCleaner.apply(plan)
                             snackbar.showSnackbar(clearedSessions)
                         }
                     },

@@ -33,16 +33,21 @@ class AppController(
         }
     }
 
-    suspend fun deleteSession(id: String) {
+    suspend fun deleteSession(id: String): SessionSiteData.Plan {
+        val removed = sessionRepository.snapshot().firstOrNull { it.id == id }?.url
         sessionRepository.delete(id)
         if (settingsRepository.current().lastSessionId == id) {
             settingsRepository.setLastSessionId(null)
         }
+        val remaining = sessionRepository.snapshot().map { it.url }
+        return SessionSiteData.planForRemoved(listOfNotNull(removed), remaining)
     }
 
-    suspend fun clearSessions() {
+    suspend fun clearSessions(): SessionSiteData.Plan {
+        val removed = sessionRepository.snapshot().map { it.url }
         sessionRepository.clear()
         settingsRepository.setLastSessionId(null)
+        return SessionSiteData.planForRemoved(removed, emptyList())
     }
 
     suspend fun updateDisplayName(id: String, rawName: String?): Boolean =

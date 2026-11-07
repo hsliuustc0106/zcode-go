@@ -82,7 +82,7 @@
     <string name="settings_theme_light">浅色</string>
     <string name="settings_theme_dark">深色</string>
     <string name="settings_clear_sessions">清除全部会话</string>
-    <string name="settings_clear_sessions_sub">删除保存在手机上的远程链接</string>
+    <string name="settings_clear_sessions_sub">删除保存在手机上的远程链接，并尽力清掉这些网站在本应用里的网页数据</string>
     <string name="settings_clear_web">清除网页登录状态</string>
     <string name="settings_clear_web_sub">退出本应用里登录的 Z.ai / BigModel，不影响电脑上的 ZCode</string>
     <string name="settings_confirm_clear_sessions_title">清除全部会话？</string>
@@ -94,7 +94,7 @@
     <string name="settings_cleared_sessions">已清除全部会话</string>
     <string name="settings_cleared_web">已清除网页登录状态</string>
     <string name="settings_delete_session_title">删除这个会话？</string>
-    <string name="settings_delete_session_body">删除「%1$s」？这只会删掉手机上保存的链接。</string>
+    <string name="settings_delete_session_body">删除「%1$s」？这只会删掉手机上保存的链接。若这是该网站上最后一条会话，会尽力清掉本应用里这个网站的网页数据。同一网站还有别的会话时不会清，因为网页数据按网站共用。</string>
     <string name="about_disclaimer">非官方客户端，与智谱 / Z.ai 无隶属关系。ZCode、智谱、Z.ai、BigModel 及其标识归各自权利人所有。</string>
     <string name="about_execution">手机端只是控制界面。代码和命令在桌面端已经连上的那台机器上执行。本应用不会在手机上创建 Linux 或 Agent 运行环境。</string>
     <string name="about_security">远程链接只保存在本机应用私有目录，并用 Android Keystore 加密。应用关闭了备份。仅允许 HTTPS。证书错误会直接取消，不能跳过。页面导航只允许 z.ai、bigmodel.cn 和 zhipuai.cn。</string>

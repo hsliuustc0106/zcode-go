@@ -162,10 +162,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 19. 删除会话时清理该会话 WebView 站点数据
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P2
 - 标签：remote、security
-- 说明：删除已保存会话时，尽力清掉该远控源站在 WebView 里的站点数据或 Cookie，避免稍后粘贴新二维码时被旧登录态干扰。写明做不到按单个会话精确隔离时的限制。不把 github.com 放进网页允许列表。本条只记账，本轮不实现。
+- 分支：`cursor/session-site-data-8257`
+- 说明：删除已保存会话时，尽力清掉该远控源站在 WebView 里的站点数据或 Cookie，避免稍后粘贴新二维码时被旧登录态干扰。写明做不到按单个会话精确隔离时的限制。不把 github.com 放进网页允许列表。压缩提交已在 `main` 的 `b8e08cf222b54c1194c8108867b14ffb003c3855`。Reviewer PASS 的 tip 是 `6296565df52df2a142174823e76851dc4bf743c8`。PR #8 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 下一步建议
 

@@ -43,6 +43,7 @@ import com.zcodego.app.ui.remote.ScannerScreen
 import com.zcodego.app.ui.remote.readClipboard
 import com.zcodego.app.ui.settings.SettingsScreen
 import com.zcodego.app.ui.web.OfficialDestination
+import com.zcodego.app.ui.web.WebOriginCleaner
 import com.zcodego.app.ui.web.WebScreen
 import kotlinx.coroutines.launch
 
@@ -178,7 +179,12 @@ fun AppNav(
                         nav.navigate(Routes.session(id))
                     }
                 },
-                onDeleteSession = { id -> scope.launch { controller.deleteSession(id) } },
+                onDeleteSession = { id ->
+                    scope.launch {
+                        val plan = controller.deleteSession(id)
+                        WebOriginCleaner.apply(plan)
+                    }
+                },
                 onRenameSession = { id, name -> scope.launch { controller.updateDisplayName(id, name) } },
                 onSwitchToRemote = {
                     scope.launch {
@@ -201,7 +207,12 @@ fun AppNav(
                         nav.navigate(Routes.session(id))
                     }
                 },
-                onDeleteSession = { id -> scope.launch { controller.deleteSession(id) } },
+                onDeleteSession = { id ->
+                    scope.launch {
+                        val plan = controller.deleteSession(id)
+                        WebOriginCleaner.apply(plan)
+                    }
+                },
                 onRenameSession = { id, name -> scope.launch { controller.updateDisplayName(id, name) } },
                 onClipboard = { openRawLink(readClipboard(context)) },
             )
@@ -291,8 +302,9 @@ fun AppNav(
                     },
                     onDeleteSession = {
                         scope.launch {
-                            controller.deleteSession(id)
+                            val plan = controller.deleteSession(id)
                             nav.popBackStack()
+                            WebOriginCleaner.apply(plan)
                         }
                     },
                 )
