@@ -312,6 +312,28 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 - 分支：`cursor/prune-orphan-drafts-8257`
 - 说明：读取跟进草稿文件时，丢掉会话 id 已经不在当前会话列表里的条目。不要在日志里打印草稿正文。会话存储打不开时不清理。压缩提交已在 `main` 的 `7998b21613ccefb0c56ea74d3b167195f99bd5c0`。Reviewer PASS 的 tip 是 `5594cbe332881b0ac43613d2b73b9791d3b8d54d`。PR #26 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
+## 38. 扫码成功轻震动
+
+- 状态：done
+- 优先级：P2
+- 标签：remote、ux
+- 分支：`cursor/scan-success-haptic-8257`
+- 说明：扫到一条有效的 HTTPS 远程链接后，在进入会话之前给一次短的系统触感（Confirm；更早的系统用 ContextClick）。解码失败或链接无效时不震动。压缩提交已在 `main` 的 `3e34a3f4a07ded3cc00be5bdc7a5e19fd7880f96`。Reviewer PASS 的 tip 是 `850620e81c5627e2cd08fbe9b618e5e3ca0da418`。PR #27 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
+
+## 39. 设置里重新进入首次引导
+
+- 状态：agent-ready
+- 优先级：P2
+- 标签：settings、ux
+- 说明：设置里增加一个动作，清掉已选的运行位置。确认后再显示首次的「ZCode 在哪里运行?」，可以是立刻，也可以是下次启动。不删除已保存的会话，也不清远程站点数据。本条只记账，本轮不实现。
+
+## 40. 远程页可选禁止截屏
+
+- 状态：agent-ready
+- 优先级：P2
+- 标签：remote、security
+- 说明：设置里增加一个开关，默认关闭。打开后，只给远程页窗口加上 FLAG_SECURE，让截屏和最近任务里的这一页变模糊。其他页面不受影响。不要在日志里打印远程链接。本条只记账，本轮不实现。
+
 ## 下一步建议
 
 真机或模拟器上按这个顺序点一遍即可。没有设备时，单元测试和 `assembleDebug` 不能代替这些步骤。

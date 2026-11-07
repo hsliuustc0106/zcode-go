@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.view.HapticFeedbackConstants
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
@@ -55,6 +56,7 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -64,10 +66,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.zcodego.app.R
 import com.zcodego.app.camera.QrAnalyzer
-import com.zcodego.app.security.LinkDecision
-import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RejectReason
-import com.zcodego.app.security.RemoteUrlPolicy
 import com.zcodego.app.ui.components.ZCodeBackdrop
 import com.zcodego.app.ui.components.ZCodeButton
 import com.zcodego.app.ui.components.ZCodeOutlinedButton
@@ -111,14 +110,21 @@ fun ScannerScreen(
     var hasFlash by remember { mutableStateOf(false) }
     var cameraMissing by remember { mutableStateOf(false) }
     var camera by remember { mutableStateOf<Camera?>(null) }
+    val view = LocalView.current
     val onQr = rememberUpdatedState { text: String ->
         if (accepted) return@rememberUpdatedState
-        val parsed = RemoteUrlPolicy.parseRemoteLink(text)
-        if (LinkDecision.canSave(parsed)) {
-            accepted = true
-            onAccepted((parsed as ParseResult.Ok).link.url)
-        } else {
-            error = (parsed as ParseResult.Reject).reason
+        when (val outcome = ScanOutcome.decide(text)) {
+            is ScanOutcome.Accept -> {
+                accepted = true
+                runCatching {
+                    view.performHapticFeedback(
+                        ScanOutcome.feedbackConstant(),
+                        HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING,
+                    )
+                }
+                onAccepted(outcome.url)
+            }
+            is ScanOutcome.Decline -> error = outcome.reason
         }
     }
 
