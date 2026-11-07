@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">zcode-go</string>
+    <string name="splash_loading">正在打开</string>
+
+    <string name="host_picker_title">ZCode 在哪里运行?</string>
+    <string name="host_picker_subtitle">之后可以在设置里更改</string>
+    <string name="host_local_title">本机</string>
+    <string name="host_local_subtitle">登录 Z.ai / BigModel。完整引擎仍在电脑上</string>
+    <string name="host_remote_title">远程主机</string>
+    <string name="host_remote_subtitle">连接电脑上的 ZCode</string>
+    <string name="action_continue">继续</string>
+    <string name="action_back_step">上一步</string>
+    <string name="action_go_connect">去连接</string>
+    <string name="action_enter_home">进入首页</string>
+
+    <string name="step_remote_title">准备连接电脑</string>
+    <string name="step_remote_subtitle">手机只负责控制，命令仍在电脑上执行</string>
+    <string name="step_remote_b1">打开桌面 ZCode，点左下角侧栏的手机图标</string>
+    <string name="step_remote_b2">扫描二维码，或把连接地址粘贴到下一页</string>
+    <string name="step_remote_b3">用完后在电脑上点「停止」。不要把地址转发给别人</string>
+
+    <string name="step_local_title">本机暂不运行引擎</string>
+    <string name="step_local_subtitle">之后可以在设置里改成远程主机</string>
+    <string name="step_local_b1">可以打开 ZCode 与 BigModel 的官方页面并登录</string>
+    <string name="step_local_b2">手机不会执行代码，也不会新建 SSH、WSL 或容器</string>
+    <string name="step_local_b3">已经保存的远程链接，仍可以从首页打开</string>
+
+    <string name="cd_back">返回</string>
+    <string name="cd_settings">设置</string>
+    <string name="cd_close">关闭</string>
+    <string name="cd_delete_session">删除会话</string>
+    <string name="cd_reload">重新加载</string>
+    <string name="cd_torch_on">打开闪光灯</string>
+    <string name="cd_torch_off">关闭闪光灯</string>
+
+    <string name="pairing_title">连接远程主机</string>
+    <string name="pairing_subtitle">扫电脑上的二维码，或粘贴连接地址</string>
+    <string name="pairing_scan">扫描二维码</string>
+    <string name="pairing_paste">粘贴链接</string>
+    <string name="pairing_field_label">连接地址</string>
+    <string name="pairing_placeholder">https://zcode.z.ai/remote/…</string>
+    <string name="pairing_connect">连接</string>
+    <string name="pairing_clipboard">从剪贴板粘贴</string>
+    <string name="pairing_skip">稍后再说</string>
+    <string name="pairing_security">地址等同于临时钥匙，只加密保存在这台手机，不要转发或公开。</string>
+
+    <string name="scanner_hint">将二维码放入框内</string>
+    <string name="scanner_hint_sub">只识别 zcode.z.ai 的远程控制链接</string>
+    <string name="scanner_need_permission">需要相机权限才能扫码。你也可以返回后粘贴链接。</string>
+    <string name="scanner_open_settings">去系统设置</string>
+    <string name="scanner_use_paste">返回去粘贴</string>
+    <string name="scanner_no_camera">这台设备没有可用的相机，请改为粘贴链接</string>
+
+    <string name="remote_title">远程主机</string>
+    <string name="remote_empty_title">还没有连接</string>
+    <string name="remote_empty_body">在桌面 ZCode 左下角打开「移动端远程控制」，用手机扫码或粘贴链接。命令仍由那台电脑执行。</string>
+    <string name="remote_add_scan">扫描二维码</string>
+    <string name="remote_add_paste">粘贴链接</string>
+    <string name="remote_section">最近会话</string>
+    <string name="unnamed_device">未命名电脑</string>
+    <string name="session_meta">%1$s · %2$s</string>
+
+    <string name="local_title">本机</string>
+    <string name="local_banner_title">完整引擎不在这台手机上</string>
+    <string name="local_banner_body">手机上还不能运行完整的 ZCode 引擎，也不会在这里执行命令。你可以登录官方页面查看账号，或改连电脑上的 ZCode。</string>
+    <string name="local_open_zcode">打开 ZCode</string>
+    <string name="local_open_bigmodel">登录 BigModel</string>
+    <string name="local_recent">最近的远程会话</string>
+    <string name="local_recent_empty">还没有保存的远程链接</string>
+    <string name="local_switch_remote">改为连接远程主机</string>
+
+    <string name="settings_title">设置</string>
+    <string name="settings_section_host">运行位置</string>
+    <string name="settings_section_appearance">外观</string>
+    <string name="settings_section_data">数据</string>
+    <string name="settings_section_about">关于</string>
+    <string name="settings_reopen">启动时打开上次会话</string>
+    <string name="settings_reopen_sub">再次打开应用时，直接进入上次的远程页面</string>
+    <string name="settings_theme_system">跟随系统</string>
+    <string name="settings_theme_light">浅色</string>
+    <string name="settings_theme_dark">深色</string>
+    <string name="settings_clear_sessions">清除全部会话</string>
+    <string name="settings_clear_sessions_sub">删除保存在手机上的远程链接</string>
+    <string name="settings_clear_web">清除网页登录状态</string>
+    <string name="settings_clear_web_sub">退出本应用里登录的 Z.ai / BigModel，不影响电脑上的 ZCode</string>
+    <string name="settings_confirm_clear_sessions_title">清除全部会话？</string>
+    <string name="settings_confirm_clear_sessions_body">只删除保存在手机上的远程链接，不会停止电脑上的远控。若链接已经外泄，请在桌面端刷新二维码。</string>
+    <string name="settings_confirm_clear_web_title">清除网页登录状态？</string>
+    <string name="settings_confirm_clear_web_body">会退出已在本应用里登录的 Z.ai / BigModel。电脑上的 ZCode 不受影响。</string>
+    <string name="settings_confirm">清除</string>
+    <string name="settings_cancel">取消</string>
+    <string name="settings_cleared_sessions">已清除全部会话</string>
+    <string name="settings_cleared_web">已清除网页登录状态</string>
+    <string name="settings_delete_session_title">删除这个会话？</string>
+    <string name="settings_delete_session_body">删除「%1$s」？这只会删掉手机上保存的链接。</string>
+    <string name="about_disclaimer">非官方客户端，与智谱 / Z.ai 无隶属关系。ZCode、智谱、Z.ai、BigModel 及其标识归各自权利人所有。</string>
+    <string name="about_execution">手机端只是控制界面。代码和命令在桌面端已经连上的那台机器上执行。本应用不会在手机上创建 Linux 或 Agent 运行环境。</string>
+    <string name="about_security">远程链接只保存在本机应用私有目录，并用 Android Keystore 加密。应用关闭了备份。仅允许 HTTPS。证书错误会直接取消，不能跳过。页面导航只允许 z.ai、bigmodel.cn 和 zhipuai.cn。</string>
+    <string name="about_license_summary">本软件以 MIT 许可证授权，按原样提供，不含任何担保。</string>
+    <string name="about_version">版本 %1$s（%2$d）</string>
+    <string name="about_open_docs">查看官方远程控制说明</string>
+    <string name="about_license_heading">MIT License</string>
+
+    <string name="dest_zcode">ZCode</string>
+    <string name="dest_bigmodel">BigModel</string>
+    <string name="dest_docs">远程控制说明</string>
+
+    <string name="err_empty">请输入或扫描连接地址</string>
+    <string name="err_not_https">只接受 HTTPS 链接，已拒绝明文地址</string>
+    <string name="err_host">只接受 zcode.z.ai 上的远程控制链接</string>
+    <string name="err_not_remote">这不是远程控制地址。请使用电脑上「移动端远程控制」给出的链接</string>
+    <string name="err_missing_sid">链接里没有会话参数，无法连接</string>
+    <string name="err_userinfo">链接里不能带账号或密码</string>
+    <string name="err_port">只接受标准 HTTPS 端口</string>
+    <string name="err_unparseable">无法识别这个链接</string>
+    <string name="err_ssl">证书校验失败，已取消连接</string>
+    <string name="err_blocked">已拦截非官方域名：%1$s</string>
+    <string name="err_blocked_unknown">已拦截不受信任的地址</string>
+    <string name="err_load">页面连接中断。可以重新连接。桌面端 ZCode 需要保持运行并联网。</string>
+    <string name="err_threat">安全浏览判定此页面不安全，已取消打开</string>
+    <string name="err_storage">无法初始化本机加密存储，远程链接不会被保存</string>
+    <string name="err_save">无法保存链接，请重试</string>
+    <string name="err_session_missing">找不到这个会话，可能已被删除</string>
+    <string name="err_web_unavailable">这台设备无法创建网页组件</string>
+    <string name="action_retry">重试</string>
+    <string name="action_reconnect">重新连接</string>
+    <string name="action_delete">删除</string>
+    <string name="remote_clipboard">从剪贴板连接</string>
+    <string name="session_last_badge">上次打开</string>
+    <string name="cd_switch_session">切换已保存的电脑</string>
+    <string name="switch_session_title">已保存的电脑</string>
+    <string name="switch_current">当前</string>
+    <string name="keepalive_title">zcode-go 远程控制</string>
+    <string name="keepalive_body">正在保持「%1$s」。命令仍在电脑上执行。</string>
+    <string name="keepalive_channel">远程页面保活</string>
+    <string name="attention_channel">远程页面更新</string>
+    <string name="attention_title">远程页面有变化</string>
+    <string name="net_offline">网络已断开。恢复后可以重新连接。桌面端 ZCode 也要保持在线。</string>
+    <string name="net_back">网络已恢复</string>
+    <string name="about_attention_limit">后台通知只根据网页标题变化做尽力提醒，并不能判断 Agent 是否在等你。官方页面没有给本应用单独的状态接口。保活通知只在你打开远程页面时出现，离开页面就会停。跟进条在页面外面，只在你点「填入焦点」时写入当前输入框，不会自动发送。</string>
+    <string name="followup_open">跟进</string>
+    <string name="followup_collapse">收起</string>
+    <string name="followup_hint">先点页面里的输入框，再填入。不会自动发送。</string>
+    <string name="followup_placeholder">写给桌面端的补充</string>
+    <string name="followup_insert">填入焦点</string>
+    <string name="followup_copy">复制</string>
+    <string name="followup_inserted">已填入页面焦点。请在页面里自己发送。</string>
+    <string name="followup_no_target">没有点到页面输入框。文字还在，可以复制后贴进去。</string>
+    <string name="followup_copied">已复制</string>
+</resources>
