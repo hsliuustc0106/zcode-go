@@ -47,6 +47,7 @@ import com.zcodego.app.BuildConfig
 import com.zcodego.app.R
 import com.zcodego.app.data.AppController
 import com.zcodego.app.data.HostMode
+import com.zcodego.app.data.RemoteSiteWipe
 import com.zcodego.app.data.ThemeMode
 import com.zcodego.app.ui.components.HostOptionCard
 import com.zcodego.app.ui.components.ZCodeOutlinedButton
@@ -71,6 +72,7 @@ fun SettingsScreen(
     }
     var confirmSessions by remember { mutableStateOf(false) }
     var confirmWeb by remember { mutableStateOf(false) }
+    var confirmRemoteSite by remember { mutableStateOf(false) }
     val clearedSessions = stringResource(R.string.settings_cleared_sessions)
     val clearedWeb = stringResource(R.string.settings_cleared_web)
     val githubUnavailable = stringResource(R.string.about_github_unavailable)
@@ -207,6 +209,16 @@ fun SettingsScreen(
                     )
                 }
             }
+            TextButton(onClick = { confirmRemoteSite = true }, modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(RemoteSiteWipeCopy.ACTION, color = MaterialTheme.colorScheme.error)
+                    Text(
+                        RemoteSiteWipeCopy.DETAIL,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
 
             Spacer(Modifier.height(28.dp))
             SectionTitle(stringResource(R.string.settings_section_about))
@@ -307,6 +319,30 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { confirmWeb = false }) {
+                    Text(stringResource(R.string.settings_cancel))
+                }
+            },
+        )
+    }
+    if (confirmRemoteSite) {
+        AlertDialog(
+            onDismissRequest = { confirmRemoteSite = false },
+            title = { Text(RemoteSiteWipeCopy.CONFIRM_TITLE) },
+            text = { Text(RemoteSiteWipeCopy.CONFIRM_BODY) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmRemoteSite = false
+                        val plan = RemoteSiteWipe.plan(controller.sessions.value.map { it.url })
+                        WebOriginCleaner.apply(plan)
+                        WebDataCleaner.clear {
+                            scope.launch { snackbar.showSnackbar(RemoteSiteWipeCopy.DONE) }
+                        }
+                    },
+                ) { Text(stringResource(R.string.settings_confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmRemoteSite = false }) {
                     Text(stringResource(R.string.settings_cancel))
                 }
             },

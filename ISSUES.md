@@ -210,10 +210,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 25. 设置里一键清除全部远控站点数据
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P2
 - 标签：remote、security
-- 说明：设置里增加一个动作，确认后清掉远控源站在 WebView 里的站点数据。文案写明这不会删除已保存的会话列表。本条只记账，本轮不实现。
+- 分支：`cursor/clear-site-data-8257`
+- 说明：设置里增加一个动作，确认后清掉远控源站在 WebView 里的站点数据。文案写明这不会删除已保存的会话列表。手机仍只是控制界面。压缩提交已在 `main` 的 `54c8e8197efc9945c95add552a5eaea2eb3b6027`。Reviewer PASS 的 tip 是 `1a747e47f0509b13f9f1d30ecf3845b198d1072d`。PR #14 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 下一步建议
 

@@ -1,6 +1,6 @@
 # zcode-go
 
-当前版本 **0.2.11**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
+当前版本 **0.2.12**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
 
 非官方 Android 客户端，用来在手机上打开智谱 ZCode 的远程控制页面。交互参考「先选运行位置，再继续」这一类首次引导，但界面、文案和图标都是为本项目单独写的。
 
@@ -13,7 +13,7 @@
 1. 首次打开会问「ZCode 在哪里运行?」。之后可以在设置里改。
 2. **远程主机**：扫描电脑上的二维码，或粘贴连接地址，然后在应用内打开官方远程页面。最近的会话保存在本机，可以再次打开；默认会在下次启动时回到上次的会话。
 3. **本机**：说明完整引擎还不能在手机上运行，并提供 ZCode 与 BigModel 官方页面入口，以及已保存的远程会话。
-4. 设置里可以改运行位置、主题、是否自动打开上次会话，也可以清除会话和网页登录状态。
+4. 设置里可以改运行位置、主题、是否自动打开上次会话，也可以清除会话、网页登录状态，或只清远控站点数据而保留已保存的会话列表。
 
 远程链接的公开形态一般是：
 
@@ -46,13 +46,14 @@ v3 链接里常见 `hash` 和 `t`，v4 链接常常没有这两项。应用只�
 - 界面和日志不会打印完整链接。列表里只显示设备名、协议标记和大致时间。
 - 本应用没有自己的服务器，不会把链接上传到别处。登录态如果出现，也只留在这个应用的 WebView 里。
 - 清除「网页登录状态」会删掉本应用里的 Cookie 和网页存储，不影响电脑上的 ZCode。
+- 「清除远控站点数据」会清掉本应用 WebView 里 z.ai、bigmodel.cn、zhipuai.cn 的站点数据。不会删除已保存的会话列表。远程页面如果还开着，关掉时仍可能把 Cookie 写回。
 - 删除一条会话时，只有当没有别的已保存链接还指向同一网站，才会尽力清掉该网站在本应用 WebView 里的 Cookie 和本地存储。做不到按一条链接或 sid 分开。同一网站还留着别的会话时不清，避免把另一台电脑的登录一起清掉。z.ai、bigmodel.cn 上的登录不在这条链接的源站里，不会被这次删除清掉。页面还开着时，关掉页面仍可能把 Cookie 写回。github.com 不在网页允许列表里。
 
 Keystore 初始化失败时，应用不会改用明文保存链接。
 
 ## 安装并试用
 
-当前应用版本 **0.2.11**（versionCode 13）。手机需要 Android 8.0（API 26）或更高。
+当前应用版本 **0.2.12**（versionCode 14）。手机需要 Android 8.0（API 26）或更高。
 
 开发源是 Cursor Origin 上的私有仓库 `hongxing-wang/zcode-go`。GitHub 公开仓 [hsliuustc0106/zcode-go](https://github.com/hsliuustc0106/zcode-go) 用来分发安装包，也是源码镜像。日常开发仍在 Origin，不在 GitHub。
 
@@ -64,7 +65,7 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
 adb install -r zcode-go-*-debug.apk
 ```
 
-当前最新已发布的安装包是 [v0.2.11](https://github.com/hsliuustc0106/zcode-go/releases/tag/v0.2.11)，文件名 `zcode-go-0.2.11-debug.apk`。以后仍以下载页上最新的 `zcode-go-*-debug.apk` 为准。
+当前最新已发布的安装包是 [v0.2.12](https://github.com/hsliuustc0106/zcode-go/releases/tag/v0.2.12)，文件名 `zcode-go-0.2.12-debug.apk`。以后仍以下载页上最新的 `zcode-go-*-debug.apk` 为准。
 
 应用里：设置 → 关于 → **查看最新 Release**。它用系统浏览器打开上面的 Releases 页。`github.com` 不在应用内网页的允许列表里。
 
