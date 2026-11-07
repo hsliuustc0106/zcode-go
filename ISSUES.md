@@ -234,10 +234,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 28. 切换会话时跟进草稿按会话隔离
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P2
 - 标签：remote、ux
-- 说明：跟进草稿按会话 id 分开保存，切换电脑时不要带出或清掉另一台的草稿。本条只记账，本轮不实现。
+- 分支：`cursor/followup-draft-8257`
+- 说明：跟进草稿按会话 id 分开保存，切换电脑时不要带出或清掉另一台的草稿。手机仍只是控制界面。压缩提交已在 `main` 的 `cfed7e0e057143fbe4d3eb8eb852d93ffe59d53b`。Reviewer PASS 的 tip 是 `1a14eb2c237d77ee7b0f9081a474cf1ee96993ad`。PR #17 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 下一步建议
 

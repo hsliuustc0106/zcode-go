@@ -110,6 +110,8 @@ fun WebScreen(
     sessions: List<RemoteSession> = emptyList(),
     currentSessionId: String? = null,
     onSwitchSession: (String) -> Unit = {},
+    followUpDraft: String = "",
+    onFollowUpDraftChange: (String) -> Unit = {},
     onRescan: () -> Unit = {},
     onDeleteSession: () -> Unit = {},
 ) {
@@ -358,6 +360,8 @@ fun WebScreen(
         }
             if (keepAlive && fatal == null) {
                 FollowUpBar(
+                    draft = followUpDraft,
+                    onDraftChange = onFollowUpDraftChange,
                     expanded = followUpExpanded,
                     onExpandedChange = { followUpExpanded = it },
                     onInsert = { text, done ->

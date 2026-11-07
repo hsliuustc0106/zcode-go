@@ -30,13 +30,14 @@ import com.zcodego.app.remote.InsertOutcome
 
 @Composable
 internal fun FollowUpBar(
+    draft: String,
+    onDraftChange: (String) -> Unit,
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     onInsert: (String, (InsertOutcome) -> Unit) -> Unit,
     onMessage: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    var draft by rememberSaveable { mutableStateOf("") }
     var inserting by rememberSaveable { mutableStateOf(false) }
     val inserted = stringResource(R.string.followup_inserted)
     val missing = stringResource(R.string.followup_no_target)
@@ -60,7 +61,7 @@ internal fun FollowUpBar(
                 )
                 OutlinedTextField(
                     value = draft,
-                    onValueChange = { draft = it },
+                    onValueChange = { onDraftChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
@@ -91,7 +92,7 @@ internal fun FollowUpBar(
                             onInsert(text) { outcome ->
                                 inserting = false
                                 if (outcome == InsertOutcome.INSERTED) {
-                                    draft = ""
+                                    onDraftChange("")
                                     onMessage(inserted)
                                 } else {
                                     onMessage(missing)
