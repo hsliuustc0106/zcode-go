@@ -226,10 +226,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 27. 远程页顶栏复制当前链接
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P1
 - 标签：remote、ux
-- 说明：远程页顶栏增加一个动作，把当前会话的 HTTPS 远程链接复制到剪贴板，并用一条短 Snackbar 说明。不要自动分享。本条只记账，本轮不实现。
+- 分支：`cursor/copy-session-link-8257`
+- 说明：远程页顶栏增加一个动作，把当前会话的 HTTPS 远程链接复制到剪贴板，并用一条短 Snackbar 说明。不要自动分享。手机仍只是控制界面。压缩提交已在 `main` 的 `b2ed23c3665942b49696f7d3f81ad796f06549b3`。Reviewer PASS 的 tip 是 `6dcdde5bc91017a6ac5a7ff4fcbf5eb249a25c52`。PR #16 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 28. 切换会话时跟进草稿按会话隔离
 

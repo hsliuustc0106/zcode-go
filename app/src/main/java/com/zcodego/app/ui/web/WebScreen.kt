@@ -2,6 +2,9 @@ package com.zcodego.app.ui.web
 
 import android.annotation.SuppressLint
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.http.SslError
@@ -29,6 +32,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Devices
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.AlertDialog
@@ -253,6 +257,18 @@ fun WebScreen(
                     }
                 },
                 actions = {
+                    if (keepAlive) {
+                        IconButton(onClick = {
+                            val text = SessionLinkCopy.textToCopy(url)
+                            val copied = text != null && copySessionLink(context, text)
+                            scope.launch { snackbar.showSnackbar(SessionLinkCopy.message(copied)) }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Outlined.ContentCopy,
+                                contentDescription = SessionLinkCopy.ACTION,
+                            )
+                        }
+                    }
                     if (keepAlive && sessions.isNotEmpty()) {
                         IconButton(onClick = { showSwitcher = true }) {
                             Icon(
@@ -627,4 +643,10 @@ private fun createPolicyWebView(
             onBlockedHost(null)
         }
     }
+}
+
+private fun copySessionLink(context: Context, text: String): Boolean {
+    val clipboard = context.getSystemService(ClipboardManager::class.java) ?: return false
+    clipboard.setPrimaryClip(ClipData.newPlainText("zcode-go", text))
+    return true
 }
