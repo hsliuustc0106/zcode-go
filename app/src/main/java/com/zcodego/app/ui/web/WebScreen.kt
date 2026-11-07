@@ -364,12 +364,12 @@ fun WebScreen(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
             )
             sessions.forEach { session ->
-                val name = session.visibleName(stringResource(R.string.unnamed_device))
+                val name = SessionSwitchLabel.title(session, stringResource(R.string.unnamed_device))
                 ListItem(
                     headlineContent = { Text(name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                     supportingContent = {
                         val mark = if (session.id == currentSessionId) {
-                            stringResource(R.string.switch_current)
+                            SessionSwitchLabel.currentMarker(name, stringResource(R.string.switch_current))
                         } else {
                             session.protocolLabel
                         }

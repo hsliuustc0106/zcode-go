@@ -43,6 +43,7 @@ import com.zcodego.app.ui.remote.ScannerScreen
 import com.zcodego.app.ui.remote.readClipboard
 import com.zcodego.app.ui.settings.SettingsScreen
 import com.zcodego.app.ui.web.OfficialDestination
+import com.zcodego.app.ui.web.SessionSwitchLabel
 import com.zcodego.app.ui.web.WebOriginCleaner
 import com.zcodego.app.ui.web.WebScreen
 import kotlinx.coroutines.launch
@@ -283,7 +284,7 @@ fun AppNav(
                 MissingDestination(onBack = { nav.popBackStack() })
             } else {
                 WebScreen(
-                    title = session.visibleName(stringResource(R.string.unnamed_device)),
+                    title = SessionSwitchLabel.title(session, stringResource(R.string.unnamed_device)),
                     url = session.url,
                     onBack = { nav.popBackStack() },
                     keepAlive = true,

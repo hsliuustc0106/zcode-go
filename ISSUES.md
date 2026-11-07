@@ -202,10 +202,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 24. 会话切换后标题栏显示自定义名
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P1
 - 标签：remote、ux
-- 说明：多会话切换后，顶栏和「当前」标记使用用户设置的显示名；没有自定义名时回到链接里的原名。本条只记账，本轮不实现。
+- 分支：`cursor/switcher-display-name-8257`
+- 说明：多会话切换后，顶栏和「当前」标记使用用户设置的显示名；没有自定义名时回到链接里的原名。手机仍只是控制界面。压缩提交已在 `main` 的 `636ae8df650cf0bacce6863ef7345355a30b5d59`。Reviewer PASS 的 tip 是 `6cfd5d57de207e59e0a7f72ea440cee9cc073fb4`。PR #13 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 25. 设置里一键清除全部远控站点数据
 
