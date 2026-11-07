@@ -25,4 +25,16 @@ class KeepAliveLabelTest {
         assertFalse(label.contains("http"))
         assertFalse(label.contains("sid"))
     }
+
+    @Test
+    fun keepAliveTapReusesTheSessionIdAndDropsTheUrl() {
+        val url = "https://zcode.z.ai/remote/v4?sid=secret"
+        assertEquals("sess-1", AttentionOpen.sessionId(" sess-1 "))
+        assertNull(AttentionOpen.sessionId(url))
+        assertEquals("sess-1", AttentionOpen.destination("sess-1", listOf("sess-1")))
+        assertNull(AttentionOpen.destination("gone", listOf("sess-1")))
+        val shown = KeepAliveLabel.choose("家里的电脑", url, "未命名设备")
+        assertEquals("家里的电脑", shown)
+        assertFalse(shown.contains(url))
+    }
 }

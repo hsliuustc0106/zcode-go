@@ -25,7 +25,8 @@ class RemoteKeepAliveService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val label = KeepAliveLabel.safe(intent?.getStringExtra(EXTRA_LABEL))
             ?: getString(R.string.remote_title)
-        val notification = buildNotification(label)
+        val sessionId = AttentionOpen.sessionId(intent?.getStringExtra(AttentionOpen.EXTRA_SESSION_ID))
+        val notification = buildNotification(label, sessionId)
         try {
             if (Build.VERSION.SDK_INT >= 34) {
                 startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
@@ -38,7 +39,7 @@ class RemoteKeepAliveService : Service() {
         return START_NOT_STICKY
     }
 
-    private fun buildNotification(label: String): Notification {
+    private fun buildNotification(label: String, sessionId: String?): Notification {
         val manager = getSystemService(NotificationManager::class.java)
         if (Build.VERSION.SDK_INT >= 26) {
             val channel = NotificationChannel(
@@ -53,6 +54,7 @@ class RemoteKeepAliveService : Service() {
             0,
             Intent(this, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                sessionId?.let { putExtra(AttentionOpen.EXTRA_SESSION_ID, it) }
             },
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
@@ -72,9 +74,10 @@ class RemoteKeepAliveService : Service() {
         private const val NOTIFICATION_ID = 41
         private const val EXTRA_LABEL = "label"
 
-        fun start(context: Context, label: String) {
+        fun start(context: Context, label: String, sessionId: String?) {
             val safe = KeepAliveLabel.safe(label).orEmpty()
             val intent = Intent(context, RemoteKeepAliveService::class.java).putExtra(EXTRA_LABEL, safe)
+            AttentionOpen.sessionId(sessionId)?.let { intent.putExtra(AttentionOpen.EXTRA_SESSION_ID, it) }
             runCatching { ContextCompat.startForegroundService(context, intent) }
         }
 

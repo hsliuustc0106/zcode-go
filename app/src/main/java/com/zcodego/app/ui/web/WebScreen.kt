@@ -218,10 +218,10 @@ fun WebScreen(
         webView.loadUrl(url)
     }
 
-    DisposableEffect(keepAlive, keepAliveLabel, title) {
+    DisposableEffect(keepAlive, keepAliveLabel, title, currentSessionId) {
         if (keepAlive) {
             val label = keepAliveLabel.ifBlank { title }
-            RemoteKeepAliveService.start(context, label)
+            RemoteKeepAliveService.start(context, label, currentSessionId)
         }
         onDispose {
             if (keepAlive) RemoteKeepAliveService.stop(context)
