@@ -115,6 +115,7 @@ fun WebScreen(
     onRescan: () -> Unit = {},
     onDeleteSession: () -> Unit = {},
     onRenameTitle: (() -> Unit)? = null,
+    keepAliveLabel: String = "",
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as ZCodeGoApp
@@ -217,8 +218,11 @@ fun WebScreen(
         webView.loadUrl(url)
     }
 
-    DisposableEffect(keepAlive, title) {
-        if (keepAlive) RemoteKeepAliveService.start(context, title)
+    DisposableEffect(keepAlive, keepAliveLabel, title) {
+        if (keepAlive) {
+            val label = keepAliveLabel.ifBlank { title }
+            RemoteKeepAliveService.start(context, label)
+        }
         onDispose {
             if (keepAlive) RemoteKeepAliveService.stop(context)
         }

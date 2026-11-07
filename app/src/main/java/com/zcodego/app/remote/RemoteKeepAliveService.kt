@@ -23,9 +23,8 @@ class RemoteKeepAliveService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val label = intent?.getStringExtra(EXTRA_LABEL).orEmpty().ifBlank {
-            getString(R.string.remote_title)
-        }
+        val label = KeepAliveLabel.safe(intent?.getStringExtra(EXTRA_LABEL))
+            ?: getString(R.string.remote_title)
         val notification = buildNotification(label)
         try {
             if (Build.VERSION.SDK_INT >= 34) {
@@ -74,7 +73,8 @@ class RemoteKeepAliveService : Service() {
         private const val EXTRA_LABEL = "label"
 
         fun start(context: Context, label: String) {
-            val intent = Intent(context, RemoteKeepAliveService::class.java).putExtra(EXTRA_LABEL, label)
+            val safe = KeepAliveLabel.safe(label).orEmpty()
+            val intent = Intent(context, RemoteKeepAliveService::class.java).putExtra(EXTRA_LABEL, safe)
             runCatching { ContextCompat.startForegroundService(context, intent) }
         }
 

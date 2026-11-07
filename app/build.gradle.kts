@@ -14,8 +14,8 @@ android {
         applicationId = "com.zcodego.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 19
-        versionName = "0.2.17"
+        versionCode = 20
+        versionName = "0.2.18"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true

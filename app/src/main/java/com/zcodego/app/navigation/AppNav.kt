@@ -33,6 +33,7 @@ import com.zcodego.app.R
 import com.zcodego.app.data.AppController
 import com.zcodego.app.data.HostMode
 import com.zcodego.app.remote.AttentionOpen
+import com.zcodego.app.remote.KeepAliveLabel
 import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RejectCopy
@@ -312,6 +313,11 @@ fun AppNav(
                 MissingDestination(onBack = { nav.popBackStack() })
             } else {
                 var renamingFromTitle by rememberSaveable { mutableStateOf(false) }
+                val keepAliveName = KeepAliveLabel.choose(
+                    session.customDisplayName,
+                    session.deviceName,
+                    stringResource(R.string.unnamed_device),
+                )
                 WebScreen(
                     title = SessionSwitchLabel.title(session, stringResource(R.string.unnamed_device)),
                     url = session.url,
@@ -324,6 +330,7 @@ fun AppNav(
                         followUpDraftFlat = FollowUpDrafts.decode(followUpDraftFlat).write(id, text).encode()
                     },
                     onRenameTitle = { renamingFromTitle = true },
+                    keepAliveLabel = keepAliveName,
                     onSwitchSession = { nextId ->
                         scope.launch {
                             controller.markOpened(nextId)
