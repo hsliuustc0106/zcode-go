@@ -1,6 +1,7 @@
 package com.zcodego.app.data
 
 import com.zcodego.app.security.AcceptedRemoteLink
+import com.zcodego.app.ui.web.SessionSwitchLabel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -29,6 +30,9 @@ class SessionDisplayNameTest {
         assertEquals("QR-PC", cleared[0].visibleName("未命名设备"))
         val unnamed = cleared[0].copy(deviceName = "")
         assertEquals("未命名设备", unnamed.visibleName("未命名设备"))
+        assertEquals(original.id, renamed[0].id)
+        assertEquals("家里的电脑", SessionSwitchLabel.title(renamed[0], "未命名设备"))
+        assertEquals("QR-PC", SessionSwitchLabel.title(cleared[0], "未命名设备"))
     }
 
     @Test

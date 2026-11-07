@@ -41,6 +41,7 @@ import com.zcodego.app.ui.local.LocalHomeScreen
 import com.zcodego.app.ui.onboarding.OnboardingScreen
 import com.zcodego.app.ui.remote.PairingScreen
 import com.zcodego.app.ui.remote.RemoteHomeScreen
+import com.zcodego.app.ui.remote.RenameSessionDialog
 import com.zcodego.app.ui.remote.ScannerScreen
 import com.zcodego.app.ui.remote.readClipboard
 import com.zcodego.app.ui.settings.SettingsScreen
@@ -310,6 +311,7 @@ fun AppNav(
             if (session == null || !parsedOk) {
                 MissingDestination(onBack = { nav.popBackStack() })
             } else {
+                var renamingFromTitle by rememberSaveable { mutableStateOf(false) }
                 WebScreen(
                     title = SessionSwitchLabel.title(session, stringResource(R.string.unnamed_device)),
                     url = session.url,
@@ -321,6 +323,7 @@ fun AppNav(
                     onFollowUpDraftChange = { text ->
                         followUpDraftFlat = FollowUpDrafts.decode(followUpDraftFlat).write(id, text).encode()
                     },
+                    onRenameTitle = { renamingFromTitle = true },
                     onSwitchSession = { nextId ->
                         scope.launch {
                             controller.markOpened(nextId)
@@ -341,6 +344,16 @@ fun AppNav(
                         }
                     },
                 )
+                if (renamingFromTitle) {
+                    RenameSessionDialog(
+                        session = session,
+                        onDismiss = { renamingFromTitle = false },
+                        onSave = { name ->
+                            renamingFromTitle = false
+                            scope.launch { controller.updateDisplayName(session.id, name) }
+                        },
+                    )
+                }
             }
         }
         composable(

@@ -114,6 +114,7 @@ fun WebScreen(
     onFollowUpDraftChange: (String) -> Unit = {},
     onRescan: () -> Unit = {},
     onDeleteSession: () -> Unit = {},
+    onRenameTitle: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as ZCodeGoApp
@@ -243,6 +244,14 @@ fun WebScreen(
                 title = {
                     Text(
                         text = title,
+                        modifier = if (onRenameTitle != null) {
+                            Modifier.clickable(
+                                onClickLabel = stringResource(R.string.cd_rename_session),
+                                onClick = onRenameTitle,
+                            )
+                        } else {
+                            Modifier
+                        },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.SemiBold,
