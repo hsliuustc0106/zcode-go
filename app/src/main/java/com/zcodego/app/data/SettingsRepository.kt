@@ -39,6 +39,13 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
+    /** Removes the host-mode choice only. Theme, reopen, and last session stay. */
+    suspend fun clearHostMode() {
+        context.settingsDataStore.edit { prefs ->
+            prefs.remove(Keys.HOST_MODE)
+        }
+    }
+
     suspend fun setThemeMode(mode: ThemeMode) {
         context.settingsDataStore.edit { prefs ->
             prefs[Keys.THEME_MODE] = mode.storageValue

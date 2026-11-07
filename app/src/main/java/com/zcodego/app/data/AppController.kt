@@ -17,6 +17,9 @@ class AppController(
 
     suspend fun setHostMode(mode: HostMode) = settingsRepository.setHostMode(mode)
 
+    /** Forgets where ZCode runs. Does not delete sessions or remote site data. */
+    suspend fun clearHostMode() = settingsRepository.clearHostMode()
+
     suspend fun setThemeMode(mode: ThemeMode) = settingsRepository.setThemeMode(mode)
 
     suspend fun setReopenLastSession(enabled: Boolean) = settingsRepository.setReopenLastSession(enabled)

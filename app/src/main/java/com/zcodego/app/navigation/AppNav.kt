@@ -311,6 +311,7 @@ fun AppNav(
                 onHostModeChanged = { mode ->
                     nav.resetTo(if (mode == HostMode.LOCAL) Routes.LOCAL else Routes.REMOTE)
                 },
+                onReplayOnboarding = { nav.resetTo(Routes.ONBOARDING) },
                 onOpenDocs = { nav.navigate(Routes.official(OfficialDestination.DOCS.route)) },
                 onSessionsCleared = { dropAllFollowUpDrafts() },
             )

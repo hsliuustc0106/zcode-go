@@ -74,6 +74,11 @@
 
     <string name="settings_title">设置</string>
     <string name="settings_section_host">运行位置</string>
+    <string name="settings_replay_onboarding">重新选择运行位置</string>
+    <string name="settings_replay_onboarding_sub">再次显示「ZCode 在哪里运行?」。已保存的会话和网页数据都还在。</string>
+    <string name="settings_replay_onboarding_title">重新进入首次引导？</string>
+    <string name="settings_replay_onboarding_body">只会忘掉这次选的运行位置。已保存的电脑和远程站点数据不会删除。确认后马上回到「ZCode 在哪里运行?」，下次启动也一样。</string>
+    <string name="settings_replay_onboarding_confirm">重新选择</string>
     <string name="settings_section_appearance">外观</string>
     <string name="settings_theme_hint">默认跟随系统的浅色或深色。Android 12 及以上在跟随系统时使用壁纸配色。也可以改成始终浅色或始终深色。</string>
     <string name="settings_section_data">数据</string>

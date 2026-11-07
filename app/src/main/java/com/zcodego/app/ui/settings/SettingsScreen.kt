@@ -61,6 +61,7 @@ fun SettingsScreen(
     controller: AppController,
     onBack: () -> Unit,
     onHostModeChanged: (HostMode) -> Unit,
+    onReplayOnboarding: () -> Unit,
     onOpenDocs: () -> Unit,
     onSessionsCleared: () -> Unit = {},
 ) {
@@ -74,6 +75,7 @@ fun SettingsScreen(
     var confirmSessions by remember { mutableStateOf(false) }
     var confirmWeb by remember { mutableStateOf(false) }
     var confirmRemoteSite by remember { mutableStateOf(false) }
+    var confirmReplay by remember { mutableStateOf(false) }
     val clearedSessions = stringResource(R.string.settings_cleared_sessions)
     val clearedWeb = stringResource(R.string.settings_cleared_web)
     val githubUnavailable = stringResource(R.string.about_github_unavailable)
@@ -133,6 +135,17 @@ fun SettingsScreen(
                     }
                 },
             )
+            Spacer(Modifier.height(8.dp))
+            TextButton(onClick = { confirmReplay = true }, modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.settings_replay_onboarding))
+                    Text(
+                        stringResource(R.string.settings_replay_onboarding_sub),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
 
             Spacer(Modifier.height(28.dp))
             SectionTitle(stringResource(R.string.settings_section_appearance))
@@ -345,6 +358,29 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { confirmRemoteSite = false }) {
+                    Text(stringResource(R.string.settings_cancel))
+                }
+            },
+        )
+    }
+    if (confirmReplay) {
+        AlertDialog(
+            onDismissRequest = { confirmReplay = false },
+            title = { Text(stringResource(R.string.settings_replay_onboarding_title)) },
+            text = { Text(stringResource(R.string.settings_replay_onboarding_body)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmReplay = false
+                        scope.launch {
+                            controller.clearHostMode()
+                            onReplayOnboarding()
+                        }
+                    },
+                ) { Text(stringResource(R.string.settings_replay_onboarding_confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmReplay = false }) {
                     Text(stringResource(R.string.settings_cancel))
                 }
             },
