@@ -138,10 +138,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 16. 远控加载失败的扫码引导
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P1
 - 标签：remote、ux
-- 说明：FatalWebError.Load / 断线后除「重新连接」外，给出「重新扫码或粘贴」和「删除此会话」入口，文案说明桌面端刷新二维码后旧地址会失效。不实现协议级状态。本条只记账，本轮不实现。
+- 分支：`cursor/load-failure-scan-8257`
+- 说明：FatalWebError.Load / 断线后除「重新连接」外，给出「重新扫码或粘贴」和「删除此会话」入口，文案说明桌面端刷新二维码后旧地址会失效。不实现协议级状态。压缩提交已在 `main` 的 `f11ecf93a0600e6989b0978a5e6e1d2aba61b663`。Reviewer PASS 的 tip 是 `47fdcc264897d1e0469591f399a86cb08dee7c0e`。PR #5 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 下一步建议
 

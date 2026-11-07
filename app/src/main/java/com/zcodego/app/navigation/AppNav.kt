@@ -257,6 +257,16 @@ fun AppNav(
                             nav.navigate(Routes.session(nextId))
                         }
                     },
+                    onRescan = {
+                        nav.popBackStack()
+                        nav.navigate(Routes.pairing(autoScan = false))
+                    },
+                    onDeleteSession = {
+                        scope.launch {
+                            controller.deleteSession(id)
+                            nav.popBackStack()
+                        }
+                    },
                 )
             }
         }

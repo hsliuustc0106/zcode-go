@@ -120,7 +120,12 @@
     <string name="err_ssl">证书校验失败，已取消连接</string>
     <string name="err_blocked">已拦截非官方域名：%1$s</string>
     <string name="err_blocked_unknown">已拦截不受信任的地址</string>
-    <string name="err_load">页面连接中断。可以重新连接。桌面端 ZCode 需要保持运行并联网。</string>
+    <string name="err_load">页面没有连上。可以重新连接。桌面端 ZCode 需要保持运行并联网。</string>
+    <string name="load_failure_qr_hint">电脑上刷新二维码后，旧地址会立刻失效。请重新扫描或粘贴新的链接。</string>
+    <string name="action_rescan_or_paste">重新扫码或粘贴</string>
+    <string name="action_delete_this_session">删除此会话</string>
+    <string name="load_failure_delete_title">删除此会话</string>
+    <string name="load_failure_delete_body">删除「%1$s」后会离开这个页面。如果电脑上已经刷新了二维码，旧地址不会再打开。</string>
     <string name="err_threat">安全浏览判定此页面不安全，已取消打开</string>
     <string name="err_storage">无法初始化本机加密存储，远程链接不会被保存</string>
     <string name="err_save">无法保存链接，请重试</string>

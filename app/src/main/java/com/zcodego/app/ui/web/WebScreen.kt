@@ -25,10 +25,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Devices
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -91,13 +94,6 @@ private const val VIEWPORT_JS = """
 })();
 """
 
-internal sealed interface FatalWebError {
-    data object Ssl : FatalWebError
-    data object Load : FatalWebError
-    data object Threat : FatalWebError
-    data object Unavailable : FatalWebError
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebScreen(
@@ -108,6 +104,8 @@ fun WebScreen(
     sessions: List<RemoteSession> = emptyList(),
     currentSessionId: String? = null,
     onSwitchSession: (String) -> Unit = {},
+    onRescan: () -> Unit = {},
+    onDeleteSession: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as ZCodeGoApp
@@ -117,6 +115,7 @@ fun WebScreen(
     var loading by remember { mutableStateOf(true) }
     var progress by remember { mutableIntStateOf(0) }
     var showSwitcher by remember { mutableStateOf(false) }
+    var confirmDelete by remember { mutableStateOf(false) }
     var sawOffline by remember { mutableStateOf(false) }
     val online = rememberNetworkAvailable()
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
@@ -301,6 +300,10 @@ fun WebScreen(
             }
             val currentFatal = fatal
             if (currentFatal != null) {
+                val recover = LoadFailureActions.offersSessionRecovery(
+                    error = currentFatal,
+                    hasSavedSession = !currentSessionId.isNullOrBlank(),
+                )
                 FatalPane(
                     title = title,
                     message = stringResource(currentFatal.messageRes()),
@@ -311,6 +314,8 @@ fun WebScreen(
                         loading = true
                         webView.loadUrl(url)
                     },
+                    onRescan = if (recover) onRescan else null,
+                    onDelete = if (recover) {{ confirmDelete = true }} else null,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -366,6 +371,27 @@ fun WebScreen(
             webView.loadUrl(url)
         }
     }
+
+    if (confirmDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text(stringResource(R.string.load_failure_delete_title)) },
+            text = { Text(stringResource(R.string.load_failure_delete_body, title)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmDelete = false
+                        onDeleteSession()
+                    },
+                ) { Text(stringResource(R.string.action_delete)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmDelete = false }) {
+                    Text(stringResource(R.string.settings_cancel))
+                }
+            },
+        )
+    }
 }
 
 private fun FatalWebError.messageRes(): Int = when (this) {
@@ -382,11 +408,14 @@ private fun FatalPane(
     retryLabel: String,
     onBack: () -> Unit,
     onRetry: (() -> Unit)?,
+    onRescan: (() -> Unit)? = null,
+    onDelete: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -407,6 +436,23 @@ private fun FatalPane(
         Spacer(Modifier.height(24.dp))
         if (onRetry != null) {
             ZCodeButton(text = retryLabel, onClick = onRetry)
+            Spacer(Modifier.height(12.dp))
+        }
+        if (onRescan != null) {
+            Text(
+                text = stringResource(R.string.load_failure_qr_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.height(12.dp))
+            ZCodeOutlinedButton(text = stringResource(R.string.action_rescan_or_paste), onClick = onRescan)
+            Spacer(Modifier.height(12.dp))
+        }
+        if (onDelete != null) {
+            TextButton(onClick = onDelete) {
+                Text(stringResource(R.string.action_delete_this_session), color = MaterialTheme.colorScheme.error)
+            }
             Spacer(Modifier.height(12.dp))
         }
         ZCodeOutlinedButton(text = stringResource(R.string.cd_back), onClick = onBack)
