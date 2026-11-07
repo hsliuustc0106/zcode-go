@@ -30,6 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Devices
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.AlertDialog
@@ -303,6 +304,14 @@ fun WebScreen(
                             contentDescription = stringResource(R.string.cd_reload),
                         )
                     }
+                    if (keepAlive && !currentSessionId.isNullOrBlank()) {
+                        IconButton(onClick = { confirmDelete = true }) {
+                            Icon(
+                                imageVector = Icons.Outlined.DeleteOutline,
+                                contentDescription = stringResource(R.string.cd_delete_session),
+                            )
+                        }
+                    }
                 },
             )
         },
@@ -430,8 +439,8 @@ fun WebScreen(
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text(stringResource(R.string.load_failure_delete_title)) },
-            text = { Text(stringResource(R.string.load_failure_delete_body, title)) },
+            title = { Text(stringResource(R.string.settings_delete_session_title)) },
+            text = { Text(stringResource(R.string.settings_delete_session_body, title)) },
             confirmButton = {
                 TextButton(
                     onClick = {

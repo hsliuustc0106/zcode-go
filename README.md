@@ -1,6 +1,6 @@
 # zcode-go
 
-当前版本 **0.2.22**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
+当前版本 **0.2.23**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
 
 非官方 Android 客户端，用来在手机上打开智谱 ZCode 的远程控制页面。交互参考「先选运行位置，再继续」这一类首次引导，但界面、文案和图标都是为本项目单独写的。
 
@@ -53,7 +53,7 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
 
 ## 安装并试用
 
-当前应用版本 **0.2.22**（versionCode 24）。手机需要 Android 8.0（API 26）或更高。
+当前应用版本 **0.2.23**（versionCode 25）。手机需要 Android 8.0（API 26）或更高。
 
 开发源是 Cursor Origin 上的私有仓库 `hongxing-wang/zcode-go`。GitHub 公开仓 [hsliuustc0106/zcode-go](https://github.com/hsliuustc0106/zcode-go) 用来分发安装包，也是源码镜像。日常开发仍在 Origin，不在 GitHub。
 
@@ -65,7 +65,7 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
 adb install -r zcode-go-*-debug.apk
 ```
 
-当前最新已发布的安装包是 [v0.2.22](https://github.com/hsliuustc0106/zcode-go/releases/tag/v0.2.22)，文件名 `zcode-go-0.2.22-debug.apk`。以后仍以下载页上最新的 `zcode-go-*-debug.apk` 为准。这个包不会在手机上运行 ZCode 引擎。
+当前最新已发布的安装包是 [v0.2.23](https://github.com/hsliuustc0106/zcode-go/releases/tag/v0.2.23)，文件名 `zcode-go-0.2.23-debug.apk`。以后仍以下载页上最新的 `zcode-go-*-debug.apk` 为准。这个包不会在手机上运行 ZCode 引擎。
 
 应用里：设置 → 关于 → **查看最新 Release**。它用系统浏览器打开上面的 Releases 页。`github.com` 不在应用内网页的允许列表里。
 
@@ -115,7 +115,7 @@ adb install -r zcode-go-*-debug.apk
 
 技术栈：Kotlin、Jetpack Compose、Material 3、CameraX、ZXing、AndroidX WebView、DataStore、EncryptedSharedPreferences。`minSdk` 26。单模块，按包分成 onboarding、remote、local、settings、web、security 和 data。
 
-可以从系统分享或 `https://zcode.z.ai/remote/…` 链接直接打开应用。远程页顶栏点显示名可以改名，保存后标题更新，不离开当前会话。顶栏也可以复制当前这条远程链接，只写入剪贴板，不会自动分享。已保存电脑列表里同样可以复制，短提示里不出现链接。远程页面打开时会有一条前台通知，用来降低进程被系统收回的概率；离开页面后通知停止。这条通知优先用自定义显示名，没有再用链接里的原名，最后用「未命名设备」，正文不含远程链接。点它会打开当时的会话；会话已经不在时，仍按原来的方式进入应用。后台的「页面有变化」只看网页标题，不是 Agent 状态接口。标题仍是固定的「远程页面有变化」，正文是净化后的页面标题，并带上那台电脑的显示名。点那条标题通知会打开当时的会话；会话已经删掉时，仍回到当前页面。通知标题和正文都不含远程链接。
+可以从系统分享或 `https://zcode.z.ai/remote/…` 链接直接打开应用。远程页顶栏点显示名可以改名，保存后标题更新，不离开当前会话。也可以删除当前会话：确认文案与列表相同，确认后丢掉跟进草稿并离开这个页面。顶栏也可以复制当前这条远程链接，只写入剪贴板，不会自动分享。已保存电脑列表里同样可以复制，短提示里不出现链接。远程页面打开时会有一条前台通知，用来降低进程被系统收回的概率；离开页面后通知停止。这条通知优先用自定义显示名，没有再用链接里的原名，最后用「未命名设备」，正文不含远程链接。点它会打开当时的会话；会话已经不在时，仍按原来的方式进入应用。后台的「页面有变化」只看网页标题，不是 Agent 状态接口。标题仍是固定的「远程页面有变化」，正文是净化后的页面标题，并带上那台电脑的显示名。点那条标题通知会打开当时的会话；会话已经删掉时，仍回到当前页面。通知标题和正文都不含远程链接。
 
 远程页底部的「跟进」条在页面外面。它只在你点「填入焦点」时，把文字插入当前已经聚焦的输入框，不会自动发送，也不会改页面结构。草稿按会话分开，存在应用私有目录里，进程被杀掉后重新打开还在。文件里不写远程链接。切换电脑不会带出或清掉另一台的草稿。删除一条会话或清空全部会话时，对应的草稿一并丢掉。官方编辑器若不接收这种输入，用「复制」。协议级 Agent 状态、本机引擎、SSH 和插件市场当前不做，见 [ISSUES.md](ISSUES.md) 第 10、11 条。
 
