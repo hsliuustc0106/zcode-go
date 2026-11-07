@@ -31,14 +31,15 @@ import androidx.navigation.navArgument
 import com.zcodego.app.R
 import com.zcodego.app.data.AppController
 import com.zcodego.app.data.HostMode
+import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
+import com.zcodego.app.security.RejectCopy
 import com.zcodego.app.security.RemoteUrlPolicy
 import com.zcodego.app.ui.local.LocalHomeScreen
 import com.zcodego.app.ui.onboarding.OnboardingScreen
 import com.zcodego.app.ui.remote.PairingScreen
 import com.zcodego.app.ui.remote.RemoteHomeScreen
 import com.zcodego.app.ui.remote.ScannerScreen
-import com.zcodego.app.ui.remote.messageRes
 import com.zcodego.app.ui.remote.readClipboard
 import com.zcodego.app.ui.settings.SettingsScreen
 import com.zcodego.app.ui.web.OfficialDestination
@@ -55,6 +56,8 @@ private object Routes {
     const val SESSION = "session/{sessionId}"
     const val OFFICIAL = "official/{page}"
     const val SCANNED_URL = "scanned_url"
+    const val REJECT_REASON = "reject_reason"
+    const val REJECT_TEXT = "reject_text"
 
     fun pairing(autoScan: Boolean) = "pairing?autoScan=$autoScan"
     fun session(id: String) = "session/$id"
@@ -82,28 +85,40 @@ fun AppNav(
     val snackbar = remember { SnackbarHostState() }
     var openingLink by remember { mutableStateOf(false) }
 
-    fun openRawLink(raw: String) {
-        when (val parsed = RemoteUrlPolicy.parseRemoteLink(raw)) {
-            is ParseResult.Reject -> {
-                scope.launch { snackbar.showSnackbar(context.getString(parsed.reason.messageRes())) }
+    fun showRejectedLink(reasonName: String, raw: String) {
+        val route = Routes.pairing(autoScan = false)
+        nav.navigate(route) { launchSingleTop = true }
+        runCatching {
+            nav.getBackStackEntry(route).savedStateHandle.apply {
+                set(Routes.REJECT_REASON, reasonName)
+                set(Routes.REJECT_TEXT, raw.trim().take(200))
             }
-            is ParseResult.Ok -> {
-                if (openingLink) return
-                openingLink = true
-                scope.launch {
-                    try {
-                        controller.setHostMode(HostMode.REMOTE)
-                        val session = controller.saveLink(parsed.link)
-                        if (session == null) {
-                            snackbar.showSnackbar(context.getString(R.string.err_save))
-                        } else {
-                            nav.resetTo(Routes.REMOTE)
-                            nav.navigate(Routes.session(session.id))
-                        }
-                    } finally {
-                        openingLink = false
-                    }
+        }
+    }
+
+    fun openRawLink(raw: String) {
+        val parsed = RemoteUrlPolicy.parseRemoteLink(raw)
+        if (!LinkDecision.canSave(parsed)) {
+            val reason = (parsed as ParseResult.Reject).reason
+            scope.launch { snackbar.showSnackbar(RejectCopy.explain(reason)) }
+            showRejectedLink(reason.name, raw)
+            return
+        }
+        val link = (parsed as ParseResult.Ok).link
+        if (openingLink) return
+        openingLink = true
+        scope.launch {
+            try {
+                controller.setHostMode(HostMode.REMOTE)
+                val session = controller.saveLink(link)
+                if (session == null) {
+                    snackbar.showSnackbar(context.getString(R.string.err_save))
+                } else {
+                    nav.resetTo(Routes.REMOTE)
+                    nav.navigate(Routes.session(session.id))
                 }
+            } finally {
+                openingLink = false
             }
         }
     }
@@ -128,10 +143,11 @@ fun AppNav(
     }
 
     LaunchedEffect(Unit) {
-        controller.linkInbox.rejected.collect { reason ->
-            if (reason == null) return@collect
+        controller.linkInbox.rejected.collect { rejection ->
+            val item = rejection ?: return@collect
             controller.linkInbox.consumeRejected()
-            snackbar.showSnackbar(context.getString(reason.messageRes()))
+            snackbar.showSnackbar(RejectCopy.explain(item.reason))
+            showRejectedLink(item.reason.name, item.entered)
         }
     }
 
@@ -199,11 +215,23 @@ fun AppNav(
                 },
             ),
         ) { entry ->
+            val rejectName by entry.savedStateHandle
+                .getStateFlow<String?>(Routes.REJECT_REASON, null)
+                .collectAsStateWithLifecycle()
+            val rejectText by entry.savedStateHandle
+                .getStateFlow(Routes.REJECT_TEXT, "")
+                .collectAsStateWithLifecycle()
             PairingScreen(
                 controller = controller,
                 pendingScan = entry.savedStateHandle.get<String>(Routes.SCANNED_URL),
                 autoScan = entry.arguments?.getBoolean("autoScan") ?: false,
                 onPendingScanConsumed = { entry.savedStateHandle.remove<String>(Routes.SCANNED_URL) },
+                incomingReasonName = rejectName,
+                incomingText = rejectText,
+                onIncomingConsumed = {
+                    entry.savedStateHandle.remove<String>(Routes.REJECT_REASON)
+                    entry.savedStateHandle.remove<String>(Routes.REJECT_TEXT)
+                },
                 onScan = { nav.navigate(Routes.SCANNER) },
                 onBack = { nav.popBackStack() },
                 onConnected = { id ->

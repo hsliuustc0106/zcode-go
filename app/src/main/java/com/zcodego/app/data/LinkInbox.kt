@@ -13,15 +13,15 @@ class LinkInbox {
     private val acceptedState = MutableStateFlow<String?>(null)
     val accepted: StateFlow<String?> = acceptedState.asStateFlow()
 
-    private val rejectedState = MutableStateFlow<RejectReason?>(null)
-    val rejected: StateFlow<RejectReason?> = rejectedState.asStateFlow()
+    private val rejectedState = MutableStateFlow<LinkRejection?>(null)
+    val rejected: StateFlow<LinkRejection?> = rejectedState.asStateFlow()
 
     fun offerAccepted(url: String) {
         acceptedState.value = url
     }
 
-    fun offerRejected(reason: RejectReason) {
-        rejectedState.value = reason
+    fun offerRejected(reason: RejectReason, entered: String = "") {
+        rejectedState.value = LinkRejection(reason, entered.trim().take(MAX_ENTERED))
     }
 
     fun peekAccepted(): String? = acceptedState.value
@@ -32,9 +32,16 @@ class LinkInbox {
         return current
     }
 
-    fun consumeRejected(): RejectReason? {
+    fun consumeRejected(): LinkRejection? {
         val current = rejectedState.value
         rejectedState.value = null
         return current
     }
+
+    private companion object {
+        const val MAX_ENTERED = 200
+    }
 }
+
+/** The text the user entered. It is shown in the paste field and not written to logs. */
+data class LinkRejection(val reason: RejectReason, val entered: String)

@@ -12,6 +12,7 @@ import com.zcodego.app.data.SessionRestore
 import com.zcodego.app.data.ThemeMode
 import com.zcodego.app.navigation.AppNav
 import com.zcodego.app.remote.RemoteIngest
+import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RemoteUrlPolicy
 import com.zcodego.app.ui.splash.SplashScreen
@@ -79,9 +80,11 @@ class MainActivity : ComponentActivity() {
             shareText = intent?.getStringExtra(Intent.EXTRA_TEXT),
         ) ?: return
         val inbox = (application as ZCodeGoApp).controller.linkInbox
-        when (val parsed = RemoteUrlPolicy.parseRemoteLink(raw)) {
-            is ParseResult.Ok -> inbox.offerAccepted(parsed.link.url)
-            is ParseResult.Reject -> inbox.offerRejected(parsed.reason)
+        val parsed = RemoteUrlPolicy.parseRemoteLink(raw)
+        if (LinkDecision.canSave(parsed)) {
+            inbox.offerAccepted((parsed as ParseResult.Ok).link.url)
+        } else {
+            inbox.offerRejected((parsed as ParseResult.Reject).reason, raw)
         }
     }
 }

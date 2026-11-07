@@ -154,10 +154,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 18. 无效远程链接粘贴的明确错误
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P1
 - 标签：remote、ux
-- 说明：粘贴或分享进来的内容如果不是 `https://zcode.z.ai/remote/…`，用清楚的中文说明原因，并且不保存。若现有拒绝文案已经部分覆盖，只补强还不明确的情况。本条只记账，本轮不实现。
+- 分支：`cursor/reject-link-copy-8257`
+- 说明：粘贴或分享进来的内容如果不是 `https://zcode.z.ai/remote/…`，用清楚的中文说明原因，并且不保存。若现有拒绝文案已经部分覆盖，只补强还不明确的情况。压缩提交已在 `main` 的 `021b48803d5eea10228fe9dda9140840e85d987d`。Reviewer PASS 的 tip 是 `6e3e3b6ce82e9c6aacd77720e1a102688fb6b83f`。PR #7 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 19. 删除会话时清理该会话 WebView 站点数据
 

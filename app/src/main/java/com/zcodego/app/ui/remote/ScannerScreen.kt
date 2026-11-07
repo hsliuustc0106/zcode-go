@@ -64,6 +64,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.zcodego.app.R
 import com.zcodego.app.camera.QrAnalyzer
+import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RejectReason
 import com.zcodego.app.security.RemoteUrlPolicy
@@ -112,12 +113,12 @@ fun ScannerScreen(
     var camera by remember { mutableStateOf<Camera?>(null) }
     val onQr = rememberUpdatedState { text: String ->
         if (accepted) return@rememberUpdatedState
-        when (val parsed = RemoteUrlPolicy.parseRemoteLink(text)) {
-            is ParseResult.Ok -> {
-                accepted = true
-                onAccepted(parsed.link.url)
-            }
-            is ParseResult.Reject -> error = parsed.reason
+        val parsed = RemoteUrlPolicy.parseRemoteLink(text)
+        if (LinkDecision.canSave(parsed)) {
+            accepted = true
+            onAccepted((parsed as ParseResult.Ok).link.url)
+        } else {
+            error = (parsed as ParseResult.Reject).reason
         }
     }
 

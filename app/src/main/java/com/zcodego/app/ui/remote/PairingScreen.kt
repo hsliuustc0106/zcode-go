@@ -51,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.zcodego.app.R
 import com.zcodego.app.data.AppController
+import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RejectReason
 import com.zcodego.app.security.RemoteUrlPolicy
@@ -66,6 +67,9 @@ fun PairingScreen(
     pendingScan: String?,
     autoScan: Boolean,
     onPendingScanConsumed: () -> Unit,
+    incomingReasonName: String? = null,
+    incomingText: String = "",
+    onIncomingConsumed: () -> Unit = {},
     onScan: () -> Unit,
     onBack: () -> Unit,
     onConnected: (String) -> Unit,
@@ -89,29 +93,37 @@ fun PairingScreen(
             showPaste = true
             return
         }
-        when (val parsed = RemoteUrlPolicy.parseRemoteLink(trimmed)) {
-            is ParseResult.Reject -> {
-                error = parsed.reason
+        val parsed = RemoteUrlPolicy.parseRemoteLink(trimmed)
+        if (!LinkDecision.canSave(parsed)) {
+            error = (parsed as ParseResult.Reject).reason
+            showPaste = true
+            draft = trimmed
+            return
+        }
+        val link = (parsed as ParseResult.Ok).link
+        saving = true
+        error = null
+        saveFailed = false
+        scope.launch {
+            val session = controller.saveLink(link)
+            saving = false
+            if (session == null) {
+                saveFailed = true
                 showPaste = true
                 draft = trimmed
-            }
-            is ParseResult.Ok -> {
-                saving = true
-                error = null
-                saveFailed = false
-                scope.launch {
-                    val session = controller.saveLink(parsed.link)
-                    saving = false
-                    if (session == null) {
-                        saveFailed = true
-                        showPaste = true
-                        draft = trimmed
-                    } else {
-                        onConnected(session.id)
-                    }
-                }
+            } else {
+                onConnected(session.id)
             }
         }
+    }
+
+    LaunchedEffect(incomingReasonName, incomingText) {
+        val name = incomingReasonName ?: return@LaunchedEffect
+        val reason = runCatching { RejectReason.valueOf(name) }.getOrNull() ?: return@LaunchedEffect
+        error = reason
+        showPaste = true
+        if (incomingText.isNotBlank()) draft = incomingText
+        onIncomingConsumed()
     }
 
     LaunchedEffect(autoScan) {
@@ -224,9 +236,10 @@ fun PairingScreen(
                                 val text = readClipboard(context)
                                 if (text.isBlank()) {
                                     error = RejectReason.EMPTY
+                                    showPaste = true
                                 } else {
                                     draft = text
-                                    error = null
+                                    connect(text)
                                 }
                             },
                             modifier = Modifier.align(Alignment.End),

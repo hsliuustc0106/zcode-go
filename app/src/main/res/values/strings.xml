@@ -109,14 +109,14 @@
     <string name="dest_bigmodel">BigModel</string>
     <string name="dest_docs">远程控制说明</string>
 
-    <string name="err_empty">请输入或扫描连接地址</string>
-    <string name="err_not_https">只接受 HTTPS 链接，已拒绝明文地址</string>
-    <string name="err_host">只接受 zcode.z.ai 上的远程控制链接</string>
-    <string name="err_not_remote">这不是远程控制地址。请使用电脑上「移动端远程控制」给出的链接</string>
-    <string name="err_missing_sid">链接里没有会话参数，无法连接</string>
-    <string name="err_userinfo">链接里不能带账号或密码</string>
-    <string name="err_port">只接受标准 HTTPS 端口</string>
-    <string name="err_unparseable">无法识别这个链接</string>
+    <string name="err_empty">请粘贴电脑上「移动端远程控制」给出的地址，形如 https://zcode.z.ai/remote/… 。这次没有保存。</string>
+    <string name="err_not_https">只接受 HTTPS。明文或其它协议已拒绝，没有保存。请改用 https://zcode.z.ai/remote/… 。</string>
+    <string name="err_host">这不是 zcode.z.ai 上的远程控制链接，没有保存。请粘贴 https://zcode.z.ai/remote/… 。</string>
+    <string name="err_not_remote">这个链接不在 /remote/… 路径上，没有保存。请使用电脑上给出的 https://zcode.z.ai/remote/… 。</string>
+    <string name="err_missing_sid">地址里缺少会话参数，无法连接，没有保存。请换一条完整的 https://zcode.z.ai/remote/… 。</string>
+    <string name="err_userinfo">链接里不能带账号或密码，没有保存。请改用电脑上给出的 https://zcode.z.ai/remote/… 。</string>
+    <string name="err_port">只接受标准 HTTPS 端口，没有保存。请使用 https://zcode.z.ai/remote/… 。</string>
+    <string name="err_unparseable">无法识别成远程控制链接，没有保存。请粘贴完整的 https://zcode.z.ai/remote/… 。</string>
     <string name="err_ssl">证书校验失败，已取消连接</string>
     <string name="err_blocked">已拦截非官方域名：%1$s</string>
     <string name="err_blocked_unknown">已拦截不受信任的地址</string>
