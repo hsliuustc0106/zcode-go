@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import android.view.HapticFeedbackConstants
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
@@ -116,12 +115,7 @@ fun ScannerScreen(
         when (val outcome = ScanOutcome.decide(text)) {
             is ScanOutcome.Accept -> {
                 accepted = true
-                runCatching {
-                    view.performHapticFeedback(
-                        ScanOutcome.feedbackConstant(),
-                        HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING,
-                    )
-                }
+                ScanOutcome.pulse(view)
                 onAccepted(outcome.url)
             }
             is ScanOutcome.Decline -> error = outcome.reason

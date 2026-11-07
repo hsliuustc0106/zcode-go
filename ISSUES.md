@@ -336,6 +336,28 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 - 分支：`cursor/secure-remote-screen-8257`
 - 说明：设置里增加一个开关，默认关闭。打开后，只给远程页窗口加上 FLAG_SECURE，让截屏和最近任务里的这一页变模糊。其他页面不受影响。不要在日志里打印远程链接。压缩提交已在 `main` 的 `935ca9ab985f640447a0596b6aa331476d4da733`。Reviewer PASS 的 tip 是 `170acbb8b4db09dd7e220de4e71ab2caf2b1f819`。PR #29 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
+## 41. 粘贴有效远程链接成功轻震动
+
+- 状态：done
+- 优先级：P2
+- 标签：remote、ux
+- 分支：`cursor/paste-link-haptic-8257`
+- 说明：粘贴、系统分享或收件箱接受一条有效的 HTTPS 远程链接、即将保存并打开会话时，给一次与扫码成功相同的短系统触感（Confirm；更早的系统用 ContextClick）。链接无效或被拒绝时不震动。压缩提交已在 `main` 的 `049d85bf157e807b032b14d896aa373495e2a397`。Reviewer PASS 的 tip 是 `959decf47ad6122e6a727dee8c5198e98ed839be`。PR #30 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
+
+## 42. 关于页一键复制版本信息
+
+- 状态：agent-ready
+- 优先级：P2
+- 标签：settings、ux
+- 说明：设置的关于里增加复制动作，把一行简短诊断信息放到剪贴板，包含应用名、versionName、versionCode，以及当前运行位置。短提示里不出现远程链接或会话 id。本条只记账，本轮不实现。
+
+## 43. 系统返回离开远程页可确认
+
+- 状态：agent-ready
+- 优先级：P2
+- 标签：remote、ux
+- 说明：设置里增加一个开关，默认关闭。打开后，在远程页按系统返回会先短确认再离开。顶栏里已经会离开的导航不受影响。不要在日志里打印远程链接。本条只记账，本轮不实现。
+
 ## 下一步建议
 
 真机或模拟器上按这个顺序点一遍即可。没有设备时，单元测试和 `assembleDebug` 不能代替这些步骤。

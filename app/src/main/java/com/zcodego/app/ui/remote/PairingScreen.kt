@@ -41,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -51,10 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.zcodego.app.R
 import com.zcodego.app.data.AppController
-import com.zcodego.app.security.LinkDecision
-import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RejectReason
-import com.zcodego.app.security.RemoteUrlPolicy
 import com.zcodego.app.ui.components.InfoBanner
 import com.zcodego.app.ui.components.ZCodeBackdrop
 import com.zcodego.app.ui.components.ZCodeButton
@@ -77,6 +75,7 @@ fun PairingScreen(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val view = LocalView.current
     var showPaste by rememberSaveable { mutableStateOf(false) }
     var draft by rememberSaveable { mutableStateOf("") }
     var error by remember { mutableStateOf<RejectReason?>(null) }
@@ -85,34 +84,31 @@ fun PairingScreen(
     val storageFailed by controller.storageFailed.collectAsStateWithLifecycle()
     var launchedScan by rememberSaveable { mutableStateOf(false) }
 
-    fun connect(raw: String) {
+    fun connect(raw: String, alreadyPulsed: Boolean = false) {
         if (saving) return
         val trimmed = raw.trim()
-        if (trimmed.isEmpty()) {
-            error = RejectReason.EMPTY
-            showPaste = true
-            return
-        }
-        val parsed = RemoteUrlPolicy.parseRemoteLink(trimmed)
-        if (!LinkDecision.canSave(parsed)) {
-            error = (parsed as ParseResult.Reject).reason
-            showPaste = true
-            draft = trimmed
-            return
-        }
-        val link = (parsed as ParseResult.Ok).link
-        saving = true
-        error = null
-        saveFailed = false
-        scope.launch {
-            val session = controller.saveLink(link)
-            saving = false
-            if (session == null) {
-                saveFailed = true
+        when (val outcome = ScanOutcome.decide(trimmed)) {
+            is ScanOutcome.Decline -> {
+                error = outcome.reason
                 showPaste = true
-                draft = trimmed
-            } else {
-                onConnected(session.id)
+                if (trimmed.isNotEmpty()) draft = trimmed
+            }
+            is ScanOutcome.Accept -> {
+                if (!alreadyPulsed) ScanOutcome.pulse(view)
+                saving = true
+                error = null
+                saveFailed = false
+                scope.launch {
+                    val session = controller.saveLink(outcome.link)
+                    saving = false
+                    if (session == null) {
+                        saveFailed = true
+                        showPaste = true
+                        draft = trimmed
+                    } else {
+                        onConnected(session.id)
+                    }
+                }
             }
         }
     }
@@ -136,7 +132,7 @@ fun PairingScreen(
     LaunchedEffect(pendingScan) {
         val raw = pendingScan?.takeIf { it.isNotBlank() } ?: return@LaunchedEffect
         onPendingScanConsumed()
-        connect(raw)
+        connect(raw, alreadyPulsed = true)
     }
 
     ZCodeBackdrop {

@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,7 +34,6 @@ import com.zcodego.app.data.AppController
 import com.zcodego.app.data.HostMode
 import com.zcodego.app.remote.AttentionOpen
 import com.zcodego.app.remote.KeepAliveLabel
-import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RejectCopy
 import com.zcodego.app.security.RemoteUrlPolicy
@@ -42,6 +42,7 @@ import com.zcodego.app.ui.onboarding.OnboardingScreen
 import com.zcodego.app.ui.remote.PairingScreen
 import com.zcodego.app.ui.remote.RemoteHomeScreen
 import com.zcodego.app.ui.remote.RenameSessionDialog
+import com.zcodego.app.ui.remote.ScanOutcome
 import com.zcodego.app.ui.remote.ScannerScreen
 import com.zcodego.app.ui.remote.readClipboard
 import com.zcodego.app.ui.settings.SettingsScreen
@@ -92,6 +93,7 @@ fun AppNav(
     var consumedReopen by rememberSaveable { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val view = LocalView.current
     val snackbar = remember { SnackbarHostState() }
     var openingLink by remember { mutableStateOf(false) }
     val followUpDraftFiles = remember { FollowUpDraftFiles(context.applicationContext.filesDir) }
@@ -132,28 +134,29 @@ fun AppNav(
     }
 
     fun openRawLink(raw: String) {
-        val parsed = RemoteUrlPolicy.parseRemoteLink(raw)
-        if (!LinkDecision.canSave(parsed)) {
-            val reason = (parsed as ParseResult.Reject).reason
-            scope.launch { snackbar.showSnackbar(RejectCopy.explain(reason)) }
-            showRejectedLink(reason.name, raw)
-            return
-        }
-        val link = (parsed as ParseResult.Ok).link
-        if (openingLink) return
-        openingLink = true
-        scope.launch {
-            try {
-                controller.setHostMode(HostMode.REMOTE)
-                val session = controller.saveLink(link)
-                if (session == null) {
-                    snackbar.showSnackbar(context.getString(R.string.err_save))
-                } else {
-                    nav.resetTo(Routes.REMOTE)
-                    nav.navigate(Routes.session(session.id))
+        when (val outcome = ScanOutcome.decide(raw)) {
+            is ScanOutcome.Decline -> {
+                scope.launch { snackbar.showSnackbar(RejectCopy.explain(outcome.reason)) }
+                showRejectedLink(outcome.reason.name, raw)
+            }
+            is ScanOutcome.Accept -> {
+                if (openingLink) return
+                openingLink = true
+                ScanOutcome.pulse(view)
+                scope.launch {
+                    try {
+                        controller.setHostMode(HostMode.REMOTE)
+                        val session = controller.saveLink(outcome.link)
+                        if (session == null) {
+                            snackbar.showSnackbar(context.getString(R.string.err_save))
+                        } else {
+                            nav.resetTo(Routes.REMOTE)
+                            nav.navigate(Routes.session(session.id))
+                        }
+                    } finally {
+                        openingLink = false
+                    }
                 }
-            } finally {
-                openingLink = false
             }
         }
     }
