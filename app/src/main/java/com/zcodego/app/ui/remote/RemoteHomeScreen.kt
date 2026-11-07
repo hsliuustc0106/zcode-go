@@ -49,12 +49,14 @@ fun RemoteHomeScreen(
     onPaste: () -> Unit,
     onOpenSession: (String) -> Unit,
     onDeleteSession: (String) -> Unit,
+    onRenameSession: (String, String) -> Unit,
     onClipboard: () -> Unit,
 ) {
     val sessions by controller.sessions.collectAsStateWithLifecycle()
     val settings by controller.settings.collectAsStateWithLifecycle()
     val storageFailed by controller.storageFailed.collectAsStateWithLifecycle()
     var pendingDelete by remember { mutableStateOf<RemoteSession?>(null) }
+    var pendingRename by remember { mutableStateOf<RemoteSession?>(null) }
     val now = rememberNow()
     val lastId = settings?.lastSessionId
 
@@ -136,6 +138,7 @@ fun RemoteHomeScreen(
                         nowEpochMs = now,
                         badge = if (session.id == lastId) stringResource(R.string.session_last_badge) else null,
                         onOpen = { onOpenSession(session.id) },
+                        onRename = { pendingRename = session },
                         onDelete = { pendingDelete = session },
                     )
                 }
@@ -145,7 +148,7 @@ fun RemoteHomeScreen(
 
     val deleting = pendingDelete
     if (deleting != null) {
-        val name = deleting.deviceName.ifBlank { stringResource(R.string.unnamed_device) }
+        val name = deleting.visibleName(stringResource(R.string.unnamed_device))
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
             title = { Text(stringResource(R.string.settings_delete_session_title)) },
@@ -164,6 +167,18 @@ fun RemoteHomeScreen(
                 TextButton(onClick = { pendingDelete = null }) {
                     Text(stringResource(R.string.settings_cancel))
                 }
+            },
+        )
+    }
+
+    val renaming = pendingRename
+    if (renaming != null) {
+        RenameSessionDialog(
+            session = renaming,
+            onDismiss = { pendingRename = null },
+            onSave = { name ->
+                pendingRename = null
+                onRenameSession(renaming.id, name)
             },
         )
     }

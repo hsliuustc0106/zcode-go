@@ -163,6 +163,7 @@ fun AppNav(
                     }
                 },
                 onDeleteSession = { id -> scope.launch { controller.deleteSession(id) } },
+                onRenameSession = { id, name -> scope.launch { controller.updateDisplayName(id, name) } },
                 onSwitchToRemote = {
                     scope.launch {
                         controller.setHostMode(HostMode.REMOTE)
@@ -185,6 +186,7 @@ fun AppNav(
                     }
                 },
                 onDeleteSession = { id -> scope.launch { controller.deleteSession(id) } },
+                onRenameSession = { id, name -> scope.launch { controller.updateDisplayName(id, name) } },
                 onClipboard = { openRawLink(readClipboard(context)) },
             )
         }
@@ -242,7 +244,7 @@ fun AppNav(
                 MissingDestination(onBack = { nav.popBackStack() })
             } else {
                 WebScreen(
-                    title = session.deviceName.ifBlank { stringResource(R.string.unnamed_device) },
+                    title = session.visibleName(stringResource(R.string.unnamed_device)),
                     url = session.url,
                     onBack = { nav.popBackStack() },
                     keepAlive = true,

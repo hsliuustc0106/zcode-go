@@ -5,8 +5,6 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.zcodego.app.security.AcceptedRemoteLink
-import com.zcodego.app.security.ParseResult
-import com.zcodego.app.security.RemoteUrlPolicy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -16,8 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.json.JSONArray
-import org.json.JSONObject
 import java.util.UUID
 
 /**
@@ -43,7 +39,7 @@ class SessionRepository(context: Context) {
                 try {
                     val opened = openPrefs()
                     prefs = opened
-                    sessionsState.value = SessionMerge.sortAndCap(decode(opened.getString(STORAGE_KEY, null)))
+                    sessionsState.value = SessionMerge.sortAndCap(SessionCodec.decode(opened.getString(STORAGE_KEY, null)))
                 } catch (_: Throwable) {
                     initErrorState.value = true
                     prefs = null
@@ -89,6 +85,19 @@ class SessionRepository(context: Context) {
         }
     }
 
+    /** Local label only. A blank name clears the custom label. URL and sid stay put. */
+    suspend fun updateDisplayName(id: String, rawName: String?): Boolean {
+        return mutex.withLock {
+            val store = prefs ?: return@withLock false
+            val updated = SessionMerge.updateDisplayName(sessionsState.value, id, rawName) ?: return@withLock false
+            if (!write(store, updated)) return@withLock false
+            sessionsState.value = updated
+            true
+        }
+    }
+
+    suspend fun rename(id: String, rawName: String?): Boolean = updateDisplayName(id, rawName)
+
     suspend fun clear(): Boolean {
         return mutex.withLock {
             val store = prefs ?: return@withLock false
@@ -111,67 +120,10 @@ class SessionRepository(context: Context) {
 
     private fun write(store: SharedPreferences, sessions: List<RemoteSession>): Boolean {
         return try {
-            store.edit().putString(STORAGE_KEY, encode(sessions)).commit()
+            store.edit().putString(STORAGE_KEY, SessionCodec.encode(sessions)).commit()
         } catch (_: Exception) {
             false
         }
-    }
-
-    private fun encode(sessions: List<RemoteSession>): String {
-        val array = JSONArray()
-        sessions.forEach { session ->
-            array.put(
-                JSONObject()
-                    .put("id", session.id)
-                    .put("url", session.url)
-                    .put("sid", session.sid)
-                    .put("deviceName", session.deviceName)
-                    .put("appVersion", session.appVersion ?: JSONObject.NULL)
-                    .put("protocolLabel", session.protocolLabel)
-                    .put("createdAtEpochMs", session.createdAtEpochMs)
-                    .put("lastOpenedAtEpochMs", session.lastOpenedAtEpochMs),
-            )
-        }
-        return JSONObject().put("sessions", array).toString()
-    }
-
-    private fun decode(raw: String?): List<RemoteSession> {
-        if (raw.isNullOrBlank()) return emptyList()
-        return try {
-            val array = JSONObject(raw).optJSONArray("sessions") ?: return emptyList()
-            buildList {
-                for (index in 0 until array.length()) {
-                    val session = array.optJSONObject(index)?.toSession() ?: continue
-                    if (RemoteUrlPolicy.parseRemoteLink(session.url) is ParseResult.Ok) {
-                        add(session)
-                    }
-                }
-            }
-        } catch (_: Exception) {
-            emptyList()
-        }
-    }
-
-    private fun JSONObject.toSession(): RemoteSession? {
-        val id = optString("id").takeIf { it.isNotBlank() } ?: return null
-        val url = optString("url").takeIf { it.isNotBlank() } ?: return null
-        val sid = optString("sid").takeIf { it.isNotBlank() } ?: return null
-        val versionValue = opt("appVersion")
-        val appVersion = if (versionValue == null || versionValue == JSONObject.NULL) {
-            null
-        } else {
-            versionValue.toString().takeIf { it.isNotBlank() }
-        }
-        return RemoteSession(
-            id = id,
-            url = url,
-            sid = sid,
-            deviceName = optString("deviceName"),
-            appVersion = appVersion,
-            protocolLabel = optString("protocolLabel").ifBlank { "remote" },
-            createdAtEpochMs = optLong("createdAtEpochMs"),
-            lastOpenedAtEpochMs = optLong("lastOpenedAtEpochMs"),
-        )
     }
 
     private companion object {

@@ -4,6 +4,7 @@ import com.zcodego.app.security.AcceptedRemoteLink
 
 internal object SessionMerge {
     const val MAX_SESSIONS = 30
+    private const val MAX_LABEL = 80
 
     fun upsert(
         existing: List<RemoteSession>,
@@ -47,6 +48,28 @@ internal object SessionMerge {
 
     fun delete(existing: List<RemoteSession>, id: String): List<RemoteSession> =
         existing.filterNot { it.id == id }
+
+    /**
+     * Sets a local label. Blank input clears it. Does not change the URL or sid.
+     * Returns null when [id] is not in the list.
+     */
+    fun updateDisplayName(
+        existing: List<RemoteSession>,
+        id: String,
+        rawName: String?,
+    ): List<RemoteSession>? {
+        if (existing.none { it.id == id }) return null
+        val cleaned = sanitizeDisplayName(rawName)
+        return existing.map { session ->
+            if (session.id == id) session.copy(customDisplayName = cleaned) else session
+        }
+    }
+
+    fun sanitizeDisplayName(raw: String?): String? {
+        if (raw.isNullOrBlank()) return null
+        val cleaned = raw.replace(Regex("[\\p{Cntrl}]"), "").trim().take(MAX_LABEL)
+        return cleaned.ifBlank { null }
+    }
 
     fun sortAndCap(list: List<RemoteSession>, max: Int = MAX_SESSIONS): List<RemoteSession> =
         list.sortedByDescending { it.lastOpenedAtEpochMs }.take(max)

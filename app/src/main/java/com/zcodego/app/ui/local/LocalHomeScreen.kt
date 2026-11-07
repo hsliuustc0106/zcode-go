@@ -36,6 +36,7 @@ import com.zcodego.app.data.RemoteSession
 import com.zcodego.app.ui.components.InfoBanner
 import com.zcodego.app.ui.components.ZCodeButton
 import com.zcodego.app.ui.components.ZCodeOutlinedButton
+import com.zcodego.app.ui.remote.RenameSessionDialog
 import com.zcodego.app.ui.remote.SessionRow
 import com.zcodego.app.ui.web.OfficialDestination
 
@@ -47,11 +48,13 @@ fun LocalHomeScreen(
     onOpenOfficial: (OfficialDestination) -> Unit,
     onOpenSession: (String) -> Unit,
     onDeleteSession: (String) -> Unit,
+    onRenameSession: (String, String) -> Unit,
     onSwitchToRemote: () -> Unit,
 ) {
     val sessions by controller.sessions.collectAsStateWithLifecycle()
     val storageFailed by controller.storageFailed.collectAsStateWithLifecycle()
     var pendingDelete by remember { mutableStateOf<RemoteSession?>(null) }
+    var pendingRename by remember { mutableStateOf<RemoteSession?>(null) }
     val now by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
     Scaffold(
@@ -137,6 +140,7 @@ fun LocalHomeScreen(
                         session = session,
                         nowEpochMs = now,
                         onOpen = { onOpenSession(session.id) },
+                        onRename = { pendingRename = session },
                         onDelete = { pendingDelete = session },
                     )
                 }
@@ -146,7 +150,7 @@ fun LocalHomeScreen(
 
     val deleting = pendingDelete
     if (deleting != null) {
-        val name = deleting.deviceName.ifBlank { stringResource(R.string.unnamed_device) }
+        val name = deleting.visibleName(stringResource(R.string.unnamed_device))
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
             title = { Text(stringResource(R.string.settings_delete_session_title)) },
@@ -163,6 +167,18 @@ fun LocalHomeScreen(
                 TextButton(onClick = { pendingDelete = null }) {
                     Text(stringResource(R.string.settings_cancel))
                 }
+            },
+        )
+    }
+
+    val renaming = pendingRename
+    if (renaming != null) {
+        RenameSessionDialog(
+            session = renaming,
+            onDismiss = { pendingRename = null },
+            onSave = { name ->
+                pendingRename = null
+                onRenameSession(renaming.id, name)
             },
         )
     }

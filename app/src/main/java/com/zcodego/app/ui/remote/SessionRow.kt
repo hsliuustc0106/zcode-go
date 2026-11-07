@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material.icons.outlined.DriveFileRenameOutline
 import androidx.compose.material.icons.outlined.Laptop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +32,7 @@ fun SessionRow(
     nowEpochMs: Long,
     onOpen: () -> Unit,
     onDelete: () -> Unit,
+    onRename: () -> Unit,
     modifier: Modifier = Modifier,
     badge: String? = null,
 ) {
@@ -53,7 +55,7 @@ fun SessionRow(
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = session.deviceName.ifBlank { stringResource(R.string.unnamed_device) },
+                    text = session.visibleName(stringResource(R.string.unnamed_device)),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
@@ -73,6 +75,12 @@ fun SessionRow(
                         color = MaterialTheme.colorScheme.primary,
                     )
                 }
+            }
+            IconButton(onClick = onRename) {
+                Icon(
+                    imageVector = Icons.Outlined.DriveFileRenameOutline,
+                    contentDescription = stringResource(R.string.cd_rename_session),
+                )
             }
             IconButton(onClick = onDelete) {
                 Icon(

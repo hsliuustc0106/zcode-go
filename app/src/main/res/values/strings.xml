@@ -30,6 +30,7 @@
     <string name="cd_settings">设置</string>
     <string name="cd_close">关闭</string>
     <string name="cd_delete_session">删除会话</string>
+    <string name="cd_rename_session">修改显示名称</string>
     <string name="cd_reload">重新加载</string>
     <string name="cd_torch_on">打开闪光灯</string>
     <string name="cd_torch_off">关闭闪光灯</string>
@@ -58,7 +59,7 @@
     <string name="remote_add_scan">扫描二维码</string>
     <string name="remote_add_paste">粘贴链接</string>
     <string name="remote_section">最近会话</string>
-    <string name="unnamed_device">未命名电脑</string>
+    <string name="unnamed_device">未命名设备</string>
     <string name="session_meta">%1$s · %2$s</string>
 
     <string name="local_title">本机</string>
@@ -128,6 +129,9 @@
     <string name="action_delete">删除</string>
     <string name="remote_clipboard">从剪贴板连接</string>
     <string name="session_last_badge">上次打开</string>
+    <string name="rename_session_title">显示名称</string>
+    <string name="rename_session_hint">留空则回到链接里的原名</string>
+    <string name="rename_session_save">保存</string>
     <string name="cd_switch_session">切换已保存的电脑</string>
     <string name="switch_session_title">已保存的电脑</string>
     <string name="switch_current">当前</string>

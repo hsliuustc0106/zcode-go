@@ -42,6 +42,13 @@ data class RemoteSession(
     val protocolLabel: String,
     val createdAtEpochMs: Long,
     val lastOpenedAtEpochMs: Long,
+    val customDisplayName: String? = null,
 ) {
     override fun toString(): String = "RemoteSession(id=$id, protocol=$protocolLabel)"
+
+    /** Local label. A blank custom name falls back to the name from the link. */
+    fun visibleName(unnamedFallback: String): String =
+        customDisplayName?.takeIf { it.isNotBlank() }
+            ?: deviceName.takeIf { it.isNotBlank() }
+            ?: unnamedFallback
 }

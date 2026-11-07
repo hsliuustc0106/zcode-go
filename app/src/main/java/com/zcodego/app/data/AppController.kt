@@ -45,6 +45,9 @@ class AppController(
         settingsRepository.setLastSessionId(null)
     }
 
+    suspend fun updateDisplayName(id: String, rawName: String?): Boolean =
+        sessionRepository.updateDisplayName(id, rawName)
+
     suspend fun forgetStaleLastSession() {
         val id = settingsRepository.current().lastSessionId
         if (!SessionRestore.isStale(id, sessionRepository.snapshot())) return

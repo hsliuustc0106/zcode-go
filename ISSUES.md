@@ -119,6 +119,29 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 - 说明：让人能立刻在真机试用。写出可复现的安装步骤；`assembleDebug` 必须绿；README 写清如何构建、APK 路径、`adb install`、首次打开选「远程」连官方远控。关于页显示 `versionName` 和 `versionCode`。不是缺陷修复，没有「撤掉就失败」的测试。压缩提交已在 `main` 的 `591ca625fc35a8c9d1a279fd6586c5c2ec559f26`。Origin 的合并接口没能把 PR #2 标成 merged。
 - 验收：README 有安装步骤；`./gradlew testDebugUnitTest assembleDebug` 绿；若能产出 APK，把路径写进 PR；不要伪造本机引擎能力。
 
+## 14. 会话自定义名称
+
+- 状态：done
+- 优先级：P1
+- 标签：ux、remote
+- 分支：`cursor/session-display-name-8257`
+- 说明：多台电脑时，二维码带来的 deviceName 往往不好认。允许用户给已保存会话起/改一个本地显示名（不改 URL / sid）。列表、顶栏切换、删除确认都显示这个名字；清空自定义名则回到链接里的原名（或「未命名设备」）。不在日志/toString 里打印完整 URL。压缩提交已在 `main` 的 `8b255dae720e5edf069ce24098df221d3bfc4ccf`。Reviewer PASS 的 tip 是 `9e33417a8293043200180ce14bb36216eec7d813`。PR #3 在压缩之后关闭；Origin 的合并接口没有把该 PR 标成 merged。
+- 验收：SessionRepository 有 rename/updateDisplayName；单元测试覆盖改名持久化、空名回退、删除会话；UI 可从会话行进入改名；`./gradlew testDebugUnitTest assembleDebug` 绿。
+
+## 15. GitHub 安装包下载说明
+
+- 状态：agent-ready
+- 优先级：P0
+- 标签：build、ux
+- 说明：公开仓 https://github.com/hsliuustc0106/zcode-go 已有 Release v0.2.1 APK。README「安装并试用」与关于页应写明优先从 GitHub Releases 下载 `zcode-go-*-debug.apk`，再写本地 gradle 构建。Origin PRIVATE 仍是开发源；GitHub 是安装包分发。不伪造本机引擎。本条只记账，本轮不实现。
+
+## 16. 远控加载失败的扫码引导
+
+- 状态：agent-ready
+- 优先级：P1
+- 标签：remote、ux
+- 说明：FatalWebError.Load / 断线后除「重新连接」外，给出「重新扫码或粘贴」和「删除此会话」入口，文案说明桌面端刷新二维码后旧地址会失效。不实现协议级状态。本条只记账，本轮不实现。
+
 ## 下一步建议
 
 真机或模拟器上按这个顺序点一遍即可。没有设备时，单元测试和 `assembleDebug` 不能代替这些步骤。

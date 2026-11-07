@@ -1,6 +1,6 @@
 # zcode-go
 
-当前版本 **0.2.1**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
+当前版本 **0.2.2**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
 
 非官方 Android 客户端，用来在手机上打开智谱 ZCode 的远程控制页面。交互参考「先选运行位置，再继续」这一类首次引导，但界面、文案和图标都是为本项目单独写的。
 
@@ -51,7 +51,7 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
 
 ## 安装并试用
 
-当前安装包是调试包，版本 **0.2.1**（versionCode 3）。手机需要 Android 8.0（API 26）或更高。电脑需要 JDK 17 或更高，以及 Android SDK `compileSdk 37`、Build-Tools `36` 或 `37`。
+当前安装包是调试包，版本 **0.2.2**（versionCode 4）。手机需要 Android 8.0（API 26）或更高。电脑需要 JDK 17 或更高，以及 Android SDK `compileSdk 37`、Build-Tools `36` 或 `37`。
 
 1. 安装命令行工具后，准备 SDK（路径按本机修改）：
 
