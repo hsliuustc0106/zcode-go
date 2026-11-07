@@ -54,6 +54,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -124,6 +125,7 @@ fun WebScreen(
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
     val blockedTemplate = stringResource(R.string.err_blocked)
     val blockedUnknown = stringResource(R.string.err_blocked_unknown)
+    val attentionSessionId = rememberUpdatedState(currentSessionId)
     val webView = remember(url) {
         if (!RemoteUrlPolicy.isAllowedNavigation(url)) {
             null
@@ -140,6 +142,7 @@ fun WebScreen(
                                 context = context,
                                 rawTitle = pageTitle,
                                 appInForeground = app.processInForeground.value,
+                                sessionId = attentionSessionId.value,
                             )
                         }
                     },

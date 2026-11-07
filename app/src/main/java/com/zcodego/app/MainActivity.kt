@@ -6,11 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zcodego.app.data.SessionRestore
 import com.zcodego.app.data.ThemeMode
 import com.zcodego.app.navigation.AppNav
+import com.zcodego.app.remote.AttentionOpen
 import com.zcodego.app.remote.RemoteIngest
 import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
@@ -19,10 +22,14 @@ import com.zcodego.app.ui.splash.SplashScreen
 import com.zcodego.app.ui.theme.ZCodeGoTheme
 
 class MainActivity : ComponentActivity() {
+    private var attentionSerial by mutableStateOf(0)
+    private var attentionSessionId by mutableStateOf<String?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         ingestIntent(intent)
+        deliverAttention(intent)
         val app = application as ZCodeGoApp
         val controller = app.controller
         setContent {
@@ -51,6 +58,8 @@ class MainActivity : ComponentActivity() {
                         controller = controller,
                         initialHostMode = boot.first,
                         reopenSessionId = boot.second,
+                        attentionSessionId = attentionSessionId,
+                        attentionSerial = attentionSerial,
                     )
                 }
             }
@@ -71,6 +80,19 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         ingestIntent(intent)
+        deliverAttention(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        deliverAttention(intent)
+    }
+
+    private fun deliverAttention(intent: Intent?) {
+        val id = AttentionOpen.sessionId(intent?.getStringExtra(AttentionOpen.EXTRA_SESSION_ID)) ?: return
+        intent?.removeExtra(AttentionOpen.EXTRA_SESSION_ID)
+        attentionSerial += 1
+        attentionSessionId = id
     }
 
     private fun ingestIntent(intent: Intent?) {

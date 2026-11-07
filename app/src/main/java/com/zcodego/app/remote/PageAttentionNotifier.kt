@@ -19,14 +19,15 @@ object PageAttentionNotifier {
     private const val NOTIFICATION_ID = 42
     private var lastTitle: String? = null
 
-    fun onTitle(context: Context, rawTitle: String, appInForeground: Boolean) {
+    fun onTitle(context: Context, rawTitle: String, appInForeground: Boolean, sessionId: String?) {
         val sanitized = PageAttention.sanitize(rawTitle)
         val notable = PageAttention.notableTitle(lastTitle, rawTitle, appInForeground)
         if (sanitized != null) lastTitle = sanitized
-        if (notable != null) show(context.applicationContext, notable)
+        if (notable != null) show(context.applicationContext, notable, sessionId)
     }
 
-    private fun show(context: Context, title: String) {
+    private fun show(context: Context, title: String, sessionId: String?) {
+        val text = AttentionOpen.notificationText(title) ?: return
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         if (Build.VERSION.SDK_INT >= 26) {
             manager.createNotificationChannel(
@@ -42,13 +43,14 @@ object PageAttentionNotifier {
             1,
             Intent(context, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                AttentionOpen.sessionId(sessionId)?.let { putExtra(AttentionOpen.EXTRA_SESSION_ID, it) }
             },
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_z)
             .setContentTitle(context.getString(R.string.attention_title))
-            .setContentText(title)
+            .setContentText(text)
             .setContentIntent(open)
             .setAutoCancel(true)
             .setOnlyAlertOnce(true)

@@ -31,6 +31,7 @@ import androidx.navigation.navArgument
 import com.zcodego.app.R
 import com.zcodego.app.data.AppController
 import com.zcodego.app.data.HostMode
+import com.zcodego.app.remote.AttentionOpen
 import com.zcodego.app.security.LinkDecision
 import com.zcodego.app.security.ParseResult
 import com.zcodego.app.security.RejectCopy
@@ -71,6 +72,8 @@ fun AppNav(
     controller: AppController,
     initialHostMode: HostMode?,
     reopenSessionId: String?,
+    attentionSessionId: String? = null,
+    attentionSerial: Int = 0,
 ) {
     val nav = rememberNavController()
     val start = remember {
@@ -129,7 +132,15 @@ fun AppNav(
         controller.forgetStaleLastSession()
     }
 
-    LaunchedEffect(reopen) {
+    LaunchedEffect(reopen, attentionSerial, attentionSessionId) {
+        val known = controller.sessions.value.map { it.id }
+        val tapped = AttentionOpen.destination(attentionSessionId, known)
+        if (tapped != null) {
+            consumedReopen = true
+            controller.markOpened(tapped)
+            nav.navigate(Routes.session(tapped)) { launchSingleTop = true }
+            return@LaunchedEffect
+        }
         if (!consumedReopen && !reopen.isNullOrBlank()) {
             consumedReopen = true
             nav.navigate(Routes.session(reopen))

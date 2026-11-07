@@ -216,6 +216,28 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 - 分支：`cursor/clear-site-data-8257`
 - 说明：设置里增加一个动作，确认后清掉远控源站在 WebView 里的站点数据。文案写明这不会删除已保存的会话列表。手机仍只是控制界面。压缩提交已在 `main` 的 `54c8e8197efc9945c95add552a5eaea2eb3b6027`。Reviewer PASS 的 tip 是 `1a747e47f0509b13f9f1d30ecf3845b198d1072d`。PR #14 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
+## 26. 后台标题通知点击打开对应会话
+
+- 状态：done
+- 优先级：P1
+- 标签：remote、ux
+- 分支：`cursor/attention-session-8257`
+- 说明：页面留意通知目前只打开应用，没有带上会话 id。发这条通知时把会话 id 放进 PendingIntent 的 extras；回到应用后，如果该会话还在，就打开它的远程页，否则保持现在的行为。通知正文不要放远程链接。手机仍只是控制界面。压缩提交已在 `main` 的 `f69965210430856accc5d207d341bcfbbd951462`。Reviewer PASS 的 tip 是 `0785eb58418541bbc27fce8fe1f01d5bbf88fda2`。PR #15 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
+
+## 27. 远程页顶栏复制当前链接
+
+- 状态：agent-ready
+- 优先级：P1
+- 标签：remote、ux
+- 说明：远程页顶栏增加一个动作，把当前会话的 HTTPS 远程链接复制到剪贴板，并用一条短 Snackbar 说明。不要自动分享。本条只记账，本轮不实现。
+
+## 28. 切换会话时跟进草稿按会话隔离
+
+- 状态：agent-ready
+- 优先级：P2
+- 标签：remote、ux
+- 说明：跟进草稿按会话 id 分开保存，切换电脑时不要带出或清掉另一台的草稿。本条只记账，本轮不实现。
+
 ## 下一步建议
 
 真机或模拟器上按这个顺序点一遍即可。没有设备时，单元测试和 `assembleDebug` 不能代替这些步骤。
