@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,6 +45,7 @@ import com.zcodego.app.ui.remote.RenameSessionDialog
 import com.zcodego.app.ui.remote.ScannerScreen
 import com.zcodego.app.ui.remote.readClipboard
 import com.zcodego.app.ui.settings.SettingsScreen
+import com.zcodego.app.ui.web.FollowUpDraftFiles
 import com.zcodego.app.ui.web.FollowUpDrafts
 import com.zcodego.app.ui.web.OfficialDestination
 import com.zcodego.app.ui.web.SessionSwitchLabel
@@ -93,16 +93,20 @@ fun AppNav(
     val context = LocalContext.current
     val snackbar = remember { SnackbarHostState() }
     var openingLink by remember { mutableStateOf(false) }
-    var followUpDraftFlat by rememberSaveable(stateSaver = followUpDraftSaver) {
-        mutableStateOf(arrayListOf<String>())
+    val followUpDraftFiles = remember { FollowUpDraftFiles(context.applicationContext.filesDir) }
+    var followUpDrafts by remember { mutableStateOf(followUpDraftFiles.load()) }
+
+    fun replaceFollowUpDrafts(next: FollowUpDrafts) {
+        followUpDrafts = next
+        followUpDraftFiles.save(next)
     }
 
     fun dropFollowUpDraft(sessionId: String) {
-        followUpDraftFlat = FollowUpDrafts.decode(followUpDraftFlat).remove(sessionId).encode()
+        replaceFollowUpDrafts(followUpDrafts.remove(sessionId))
     }
 
     fun dropAllFollowUpDrafts() {
-        followUpDraftFlat = FollowUpDrafts.empty().encode()
+        replaceFollowUpDrafts(followUpDrafts.clear())
     }
 
     fun showRejectedLink(reasonName: String, raw: String) {
@@ -325,9 +329,9 @@ fun AppNav(
                     keepAlive = true,
                     sessions = sessions,
                     currentSessionId = id,
-                    followUpDraft = FollowUpDrafts.decode(followUpDraftFlat).read(id),
+                    followUpDraft = followUpDrafts.read(id),
                     onFollowUpDraftChange = { text ->
-                        followUpDraftFlat = FollowUpDrafts.decode(followUpDraftFlat).write(id, text).encode()
+                        replaceFollowUpDrafts(followUpDrafts.write(id, text))
                     },
                     onRenameTitle = { renamingFromTitle = true },
                     keepAliveLabel = keepAliveName,
@@ -387,11 +391,6 @@ fun AppNav(
         )
     }
 }
-
-private val followUpDraftSaver = listSaver<ArrayList<String>, String>(
-    save = { it.toList() },
-    restore = { ArrayList(it) },
-)
 
 private fun NavHostController.resetTo(route: String) {
     navigate(route) {
