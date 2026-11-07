@@ -15,6 +15,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -24,8 +26,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,6 +42,9 @@ import com.zcodego.app.ui.components.ZCodeButton
 import com.zcodego.app.ui.components.ZCodeOutlinedButton
 import com.zcodego.app.ui.remote.RenameSessionDialog
 import com.zcodego.app.ui.remote.SessionRow
+import com.zcodego.app.ui.remote.writeClipboard
+import com.zcodego.app.ui.web.SessionLinkCopy
+import kotlinx.coroutines.launch
 import com.zcodego.app.ui.web.OfficialDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,9 +63,13 @@ fun LocalHomeScreen(
     var pendingDelete by remember { mutableStateOf<RemoteSession?>(null) }
     var pendingRename by remember { mutableStateOf<RemoteSession?>(null) }
     val now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val snackbar = remember { SnackbarHostState() }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.local_title), fontWeight = FontWeight.SemiBold) },
@@ -140,6 +151,11 @@ fun LocalHomeScreen(
                         session = session,
                         nowEpochMs = now,
                         onOpen = { onOpenSession(session.id) },
+                        onCopy = {
+                            val text = SessionLinkCopy.textToCopy(session.url)
+                            val copied = text != null && writeClipboard(context, text)
+                            scope.launch { snackbar.showSnackbar(SessionLinkCopy.message(copied)) }
+                        },
                         onRename = { pendingRename = session },
                         onDelete = { pendingDelete = session },
                     )

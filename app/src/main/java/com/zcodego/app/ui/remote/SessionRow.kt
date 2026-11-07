@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.DriveFileRenameOutline
 import androidx.compose.material.icons.outlined.Laptop
@@ -25,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.zcodego.app.R
 import com.zcodego.app.data.RemoteSession
 import com.zcodego.app.ui.format.RelativeTime
+import com.zcodego.app.ui.web.SessionLinkCopy
 
 @Composable
 fun SessionRow(
     session: RemoteSession,
     nowEpochMs: Long,
     onOpen: () -> Unit,
+    onCopy: () -> Unit,
     onDelete: () -> Unit,
     onRename: () -> Unit,
     modifier: Modifier = Modifier,
@@ -75,6 +78,12 @@ fun SessionRow(
                         color = MaterialTheme.colorScheme.primary,
                     )
                 }
+            }
+            IconButton(onClick = onCopy) {
+                Icon(
+                    imageVector = Icons.Outlined.ContentCopy,
+                    contentDescription = SessionLinkCopy.ACTION,
+                )
             }
             IconButton(onClick = onRename) {
                 Icon(

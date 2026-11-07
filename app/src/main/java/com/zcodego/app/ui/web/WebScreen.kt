@@ -2,9 +2,6 @@ package com.zcodego.app.ui.web
 
 import android.annotation.SuppressLint
 import android.Manifest
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.http.SslError
@@ -82,6 +79,7 @@ import com.zcodego.app.remote.RemoteKeepAliveService
 import com.zcodego.app.security.RemoteUrlPolicy
 import com.zcodego.app.ui.components.ZCodeButton
 import com.zcodego.app.ui.components.ZCodeOutlinedButton
+import com.zcodego.app.ui.remote.writeClipboard
 import kotlinx.coroutines.launch
 
 private const val VIEWPORT_JS = """
@@ -277,7 +275,7 @@ fun WebScreen(
                     if (keepAlive) {
                         IconButton(onClick = {
                             val text = SessionLinkCopy.textToCopy(url)
-                            val copied = text != null && copySessionLink(context, text)
+                            val copied = text != null && writeClipboard(context, text)
                             scope.launch { snackbar.showSnackbar(SessionLinkCopy.message(copied)) }
                         }) {
                             Icon(
@@ -662,10 +660,4 @@ private fun createPolicyWebView(
             onBlockedHost(null)
         }
     }
-}
-
-private fun copySessionLink(context: Context, text: String): Boolean {
-    val clipboard = context.getSystemService(ClipboardManager::class.java) ?: return false
-    clipboard.setPrimaryClip(ClipData.newPlainText("zcode-go", text))
-    return true
 }
