@@ -1,6 +1,6 @@
 # zcode-go
 
-当前版本 **0.2.6**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
+当前版本 **0.2.7**。变更记录见 [CHANGELOG.md](CHANGELOG.md)。开发流程见 [AGENTS.md](AGENTS.md)。
 
 非官方 Android 客户端，用来在手机上打开智谱 ZCode 的远程控制页面。交互参考「先选运行位置，再继续」这一类首次引导，但界面、文案和图标都是为本项目单独写的。
 
@@ -52,7 +52,7 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
 
 ## 安装并试用
 
-当前应用版本 **0.2.6**（versionCode 8）。手机需要 Android 8.0（API 26）或更高。
+当前应用版本 **0.2.7**（versionCode 9）。手机需要 Android 8.0（API 26）或更高。
 
 开发源是 Cursor Origin 上的私有仓库 `hongxing-wang/zcode-go`。GitHub 公开仓 [hsliuustc0106/zcode-go](https://github.com/hsliuustc0106/zcode-go) 用来分发安装包，也是源码镜像。日常开发仍在 Origin，不在 GitHub。
 
@@ -64,7 +64,7 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
 adb install -r zcode-go-*-debug.apk
 ```
 
-当前最新已发布的安装包是 [v0.2.6](https://github.com/hsliuustc0106/zcode-go/releases/tag/v0.2.6)，文件名 `zcode-go-0.2.6-debug.apk`。以后仍以下载页上最新的 `zcode-go-*-debug.apk` 为准。
+当前最新已发布的安装包是 [v0.2.7](https://github.com/hsliuustc0106/zcode-go/releases/tag/v0.2.7)，文件名 `zcode-go-0.2.7-debug.apk`。以后仍以下载页上最新的 `zcode-go-*-debug.apk` 为准。
 
 应用里：设置 → 关于 → **在 GitHub 下载安装包**。它用系统浏览器打开上面的 Releases 页。`github.com` 不在应用内网页的允许列表里。
 

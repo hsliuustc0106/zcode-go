@@ -132,6 +132,12 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(28.dp))
             SectionTitle(stringResource(R.string.settings_section_appearance))
+            Text(
+                text = stringResource(R.string.settings_theme_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(8.dp))
             ThemeMode.entries.forEach { mode ->
                 val label = when (mode) {
                     ThemeMode.SYSTEM -> stringResource(R.string.settings_theme_system)

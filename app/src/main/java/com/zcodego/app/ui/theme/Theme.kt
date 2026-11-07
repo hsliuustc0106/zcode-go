@@ -3,15 +3,19 @@ package com.zcodego.app.ui.theme
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.zcodego.app.data.ThemeMode
@@ -69,10 +73,14 @@ fun ZCodeGoTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
     content: @Composable () -> Unit,
 ) {
-    val dark = when (themeMode) {
-        ThemeMode.SYSTEM -> isSystemInDarkTheme()
-        ThemeMode.LIGHT -> false
-        ThemeMode.DARK -> true
+    val dark = ThemeChoice.useDark(themeMode, isSystemInDarkTheme())
+    val context = LocalContext.current
+    val colors = if (ThemeChoice.useDynamicColor(themeMode, Build.VERSION.SDK_INT)) {
+        if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else if (dark) {
+        DarkColors
+    } else {
+        LightColors
     }
     val extra = if (dark) DarkExtra else LightExtra
     val view = LocalView.current
@@ -86,7 +94,7 @@ fun ZCodeGoTheme(
     }
     CompositionLocalProvider(LocalZCodeExtra provides extra) {
         MaterialTheme(
-            colorScheme = if (dark) DarkColors else LightColors,
+            colorScheme = colors,
             typography = Typography,
             content = content,
         )

@@ -168,6 +168,28 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 - 分支：`cursor/session-site-data-8257`
 - 说明：删除已保存会话时，尽力清掉该远控源站在 WebView 里的站点数据或 Cookie，避免稍后粘贴新二维码时被旧登录态干扰。写明做不到按单个会话精确隔离时的限制。不把 github.com 放进网页允许列表。压缩提交已在 `main` 的 `b8e08cf222b54c1194c8108867b14ffb003c3855`。Reviewer PASS 的 tip 是 `6296565df52df2a142174823e76851dc4bf743c8`。PR #8 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
+## 20. 深色主题跟随系统
+
+- 状态：done
+- 优先级：P1
+- 标签：ux
+- 分支：`cursor/system-theme-8257`
+- 说明：应用外观默认跟随系统浅色或深色。若 Material 3 动态配色已经好接，跟随系统时可以使用。设置里可以改成始终浅色或始终深色，但不作为默认。手机仍只是控制界面。压缩提交已在 `main` 的 `c58fcffb5851fd0683af25e47b6aabfbb9211f5c`。Reviewer PASS 的 tip 是 `47cc008fe412ba26a4a8322587ce8f45d86eecd5`。PR #9 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
+
+## 21. 会话列表空状态扫码引导
+
+- 状态：agent-ready
+- 优先级：P1
+- 标签：remote、ux
+- 说明：远程模式下还没有已保存会话时，空状态给出「扫码或粘贴」入口和一句短说明。本条只记账，本轮不实现。
+
+## 22. 关于页打开最新 Release
+
+- 状态：agent-ready
+- 优先级：P2
+- 标签：ux
+- 说明：关于页保留一个清楚的动作，用系统浏览器打开 https://github.com/hsliuustc0106/zcode-go/releases 。不要放进 WebView 允许列表。若入口已经存在，只核对文案是否一眼能懂。本条只记账，本轮不实现。
+
 ## 下一步建议
 
 真机或模拟器上按这个顺序点一遍即可。没有设备时，单元测试和 `assembleDebug` 不能代替这些步骤。

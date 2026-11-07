@@ -74,6 +74,7 @@
     <string name="settings_title">设置</string>
     <string name="settings_section_host">运行位置</string>
     <string name="settings_section_appearance">外观</string>
+    <string name="settings_theme_hint">默认跟随系统的浅色或深色。Android 12 及以上在跟随系统时使用壁纸配色。也可以改成始终浅色或始终深色。</string>
     <string name="settings_section_data">数据</string>
     <string name="settings_section_about">关于</string>
     <string name="settings_reopen">启动时打开上次会话</string>
