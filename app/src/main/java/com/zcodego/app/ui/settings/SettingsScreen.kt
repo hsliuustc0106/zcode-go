@@ -49,6 +49,7 @@ import com.zcodego.app.data.AppController
 import com.zcodego.app.data.HostMode
 import com.zcodego.app.data.ThemeMode
 import com.zcodego.app.ui.components.HostOptionCard
+import com.zcodego.app.ui.components.ZCodeOutlinedButton
 import com.zcodego.app.ui.web.WebDataCleaner
 import com.zcodego.app.ui.web.WebOriginCleaner
 import kotlinx.coroutines.launch
@@ -218,6 +219,21 @@ fun SettingsScreen(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.about_github_releases_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(12.dp))
+            ZCodeOutlinedButton(
+                text = stringResource(R.string.about_open_github_releases),
+                onClick = {
+                    if (!GithubReleaseLink.open(context)) {
+                        scope.launch { snackbar.showSnackbar(githubUnavailable) }
+                    }
+                },
+            )
             Spacer(Modifier.height(12.dp))
             Text(text = stringResource(R.string.about_disclaimer), style = MaterialTheme.typography.bodyLarge)
             Spacer(Modifier.height(8.dp))
@@ -231,15 +247,6 @@ fun SettingsScreen(
             Spacer(Modifier.height(12.dp))
             TextButton(onClick = onOpenDocs) {
                 Text(stringResource(R.string.about_open_docs))
-            }
-            TextButton(
-                onClick = {
-                    if (!GithubReleaseLink.open(context)) {
-                        scope.launch { snackbar.showSnackbar(githubUnavailable) }
-                    }
-                },
-            ) {
-                Text(stringResource(R.string.about_open_github_releases))
             }
             HorizontalDivider()
             Spacer(Modifier.height(12.dp))

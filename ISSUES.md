@@ -186,10 +186,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 22. 关于页打开最新 Release
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P2
 - 标签：ux
-- 说明：关于页保留一个清楚的动作，用系统浏览器打开 https://github.com/hsliuustc0106/zcode-go/releases 。不要放进 WebView 允许列表。若入口已经存在，只核对文案是否一眼能懂。本条只记账，本轮不实现。
+- 分支：`cursor/about-release-link-8257`
+- 说明：关于页保留一个清楚的动作，用系统浏览器打开 https://github.com/hsliuustc0106/zcode-go/releases 。不要放进 WebView 允许列表。若入口已经存在，只核对文案是否一眼能懂。压缩提交已在 `main` 的 `928ede6d96ccf0b7aeabd6d8e975997bfac5be52`。Reviewer PASS 的 tip 是 `65c44c253d0c70e8b12db471e748a216e6bfc8f0`。PR #11 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 下一步建议
 

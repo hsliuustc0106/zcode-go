@@ -103,7 +103,8 @@
     <string name="about_license_summary">本软件以 MIT 许可证授权，按原样提供，不含任何担保。</string>
     <string name="about_version">版本 %1$s（%2$d）</string>
     <string name="about_open_docs">查看官方远程控制说明</string>
-    <string name="about_open_github_releases">在 GitHub 下载安装包</string>
+    <string name="about_open_github_releases">查看最新 Release</string>
+    <string name="about_github_releases_hint">用系统浏览器打开 GitHub 上的安装包列表，不会在应用内打开。</string>
     <string name="about_github_unavailable">没有找到可以打开这个链接的浏览器</string>
     <string name="about_license_heading">MIT License</string>
 
