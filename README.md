@@ -51,7 +51,25 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
 
 ## 安装并试用
 
-当前安装包是调试包，版本 **0.2.2**（versionCode 4）。手机需要 Android 8.0（API 26）或更高。电脑需要 JDK 17 或更高，以及 Android SDK `compileSdk 37`、Build-Tools `36` 或 `37`。
+当前应用版本 **0.2.2**（versionCode 4）。手机需要 Android 8.0（API 26）或更高。
+
+开发源是 Cursor Origin 上的私有仓库 `hongxing-wang/zcode-go`。GitHub 公开仓 [hsliuustc0106/zcode-go](https://github.com/hsliuustc0106/zcode-go) 用来分发安装包，也是源码镜像。日常开发仍在 Origin，不在 GitHub。
+
+### 从 GitHub 下载（优先）
+
+打开 [Releases](https://github.com/hsliuustc0106/zcode-go/releases)，下载文件名是 `zcode-go-*-debug.apk` 的**最新**调试包，然后：
+
+```bash
+adb install -r zcode-go-*-debug.apk
+```
+
+当前最新是 [v0.2.2](https://github.com/hsliuustc0106/zcode-go/releases/tag/v0.2.2)，文件名 `zcode-go-0.2.2-debug.apk`。以后仍以下载页上最新的 `zcode-go-*-debug.apk` 为准。这个包不会在手机上运行 ZCode 引擎。
+
+应用里：设置 → 关于 → **在 GitHub 下载安装包**。它用系统浏览器打开上面的 Releases 页。`github.com` 不在应用内网页的允许列表里。
+
+### 在本机构建（备选）
+
+电脑需要 JDK 17 或更高，以及 Android SDK `compileSdk 37`、Build-Tools `36` 或 `37`。
 
 1. 安装命令行工具后，准备 SDK（路径按本机修改）：
 
@@ -81,8 +99,7 @@ Keystore 初始化失败时，应用不会改用明文保存链接。
    adb install -r app/build/outputs/apk/debug/app-debug.apk
    ```
 
-5. 首次打开会问「ZCode 在哪里运行?」。选 **远程主机**，点 **继续**，再点 **去连接**。在电脑 ZCode 左下角打开「移动端远程控制」，扫二维码或粘贴 `https://zcode.z.ai/remote/…`。本机选项不会在手机上运行引擎。
-6. 设置 → 关于里可以看到版本名和 versionCode，并有非官方声明。
+无论从哪边装上，首次打开都会问「ZCode 在哪里运行?」。选 **远程主机**，点 **继续**，再点 **去连接**。在电脑 ZCode 左下角打开「移动端远程控制」，扫二维码或粘贴 `https://zcode.z.ai/remote/…`。本机选项不会在手机上运行引擎。设置 → 关于里可以看到版本名和 versionCode、非官方声明，以及「在 GitHub 下载安装包」。
 
 没有装过命令行工具时，从 Android 开发者站点下载 command-line tools，再执行上面的 `sdkmanager`。
 

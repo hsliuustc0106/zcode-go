@@ -1,5 +1,6 @@
 package com.zcodego.app.security
 
+import com.zcodego.app.ui.settings.GithubReleaseLink
 import com.zcodego.app.ui.web.OfficialDestination
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -122,6 +123,12 @@ class RemoteUrlPolicyTest {
         assertFalse(RemoteUrlPolicy.isAllowedNavigation("https://169.254.1.1/"))
         assertFalse(RemoteUrlPolicy.isAllowedNavigation("https://zcode.z.ai:444/cn"))
         assertFalse(RemoteUrlPolicy.isAllowedNavigation("javascript:https://z.ai/"))
+        assertFalse(RemoteUrlPolicy.isAllowedNavigation(GithubReleaseLink.RELEASES_URL))
+        assertEquals(
+            "https://github.com/hsliuustc0106/zcode-go/releases",
+            GithubReleaseLink.RELEASES_URL,
+        )
+        assertTrue(RemoteUrlPolicy.parseRemoteLink(GithubReleaseLink.RELEASES_URL) is ParseResult.Reject)
     }
 
     @Test

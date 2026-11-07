@@ -130,10 +130,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 15. GitHub 安装包下载说明
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P0
 - 标签：build、ux
-- 说明：公开仓 https://github.com/hsliuustc0106/zcode-go 已有 Release v0.2.1 APK。README「安装并试用」与关于页应写明优先从 GitHub Releases 下载 `zcode-go-*-debug.apk`，再写本地 gradle 构建。Origin PRIVATE 仍是开发源；GitHub 是安装包分发。不伪造本机引擎。本条只记账，本轮不实现。
+- 分支：`cursor/github-install-8257`
+- 说明：公开仓 https://github.com/hsliuustc0106/zcode-go 的 Releases 当前最新是 v0.2.2（`zcode-go-0.2.2-debug.apk`）。README「安装并试用」与关于页优先指向该页的最新 `zcode-go-*-debug.apk`，再写本地 gradle 构建。Origin PRIVATE 仍是开发源；GitHub 是安装包分发。不伪造本机引擎。压缩提交已在 `main` 的 `0daf94ce31eb7d348a455ace5c68c101afe4d70f`。Reviewer PASS 的 tip 是 `a167b6560ef30e0a54c7933ebed5fdb5d1850d53`。PR #4 在压缩之后关闭；Origin 的合并接口没有把该 PR 标成 merged。
 
 ## 16. 远控加载失败的扫码引导
 

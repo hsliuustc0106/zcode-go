@@ -6,6 +6,7 @@
 
 ## 未发布
 
+- 文档：安装优先从 GitHub Releases 下载最新的 `zcode-go-*-debug.apk`。当前最新是 v0.2.2。关于页用系统浏览器打开该页。`github.com` 不进入应用内网页允许列表。应用版本号仍是 0.2.2。
 - 增加 `AGENTS.md` 和复核技能。应用版本号仍是 0.2.1。Origin 不自动执行这套流程。
 - 关于页同时显示 versionName 与 versionCode。README 写明调试 APK 的构建、路径和 `adb install`。
 

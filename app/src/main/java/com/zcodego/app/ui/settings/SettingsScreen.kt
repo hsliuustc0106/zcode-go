@@ -71,6 +71,7 @@ fun SettingsScreen(
     var confirmWeb by remember { mutableStateOf(false) }
     val clearedSessions = stringResource(R.string.settings_cleared_sessions)
     val clearedWeb = stringResource(R.string.settings_cleared_web)
+    val githubUnavailable = stringResource(R.string.about_github_unavailable)
     val current = settings ?: return
 
     Scaffold(
@@ -223,6 +224,15 @@ fun SettingsScreen(
             Spacer(Modifier.height(12.dp))
             TextButton(onClick = onOpenDocs) {
                 Text(stringResource(R.string.about_open_docs))
+            }
+            TextButton(
+                onClick = {
+                    if (!GithubReleaseLink.open(context)) {
+                        scope.launch { snackbar.showSnackbar(githubUnavailable) }
+                    }
+                },
+            ) {
+                Text(stringResource(R.string.about_open_github_releases))
             }
             HorizontalDivider()
             Spacer(Modifier.height(12.dp))
