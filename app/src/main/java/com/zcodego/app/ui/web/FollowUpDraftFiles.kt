@@ -85,11 +85,21 @@ internal object FollowUpDraftCodec {
 internal class FollowUpDraftFiles(private val directory: File) {
     private val file = File(directory, FILE_NAME)
 
-    fun load(): FollowUpDrafts {
-        return runCatching {
+    /**
+     * Reads the private draft file. When [knownSessionIds] is set, entries whose
+     * session id is missing are removed and the file is rewritten. A null set
+     * means the session list could not be read, so nothing is dropped.
+     * Draft text is never written to logs.
+     */
+    fun load(knownSessionIds: Set<String>? = null): FollowUpDrafts {
+        val loaded = runCatching {
             if (!file.isFile) FollowUpDrafts.empty()
             else FollowUpDraftCodec.decode(file.readText(Charsets.UTF_8))
         }.getOrDefault(FollowUpDrafts.empty())
+        if (knownSessionIds == null) return loaded
+        val kept = loaded.retain(knownSessionIds)
+        if (kept !== loaded) save(kept)
+        return kept
     }
 
     fun save(drafts: FollowUpDrafts) {

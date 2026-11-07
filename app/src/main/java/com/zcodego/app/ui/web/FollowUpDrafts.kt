@@ -19,6 +19,17 @@ internal class FollowUpDrafts private constructor(
 
     fun clear(): FollowUpDrafts = empty()
 
+    /** Drops drafts whose session id is absent. Does not include the text in toString. */
+    fun retain(knownSessionIds: Set<String>): FollowUpDrafts {
+        if (bySession.isEmpty()) return this
+        val kept = LinkedHashMap<String, String>(bySession.size)
+        var dropped = false
+        for ((id, text) in bySession) {
+            if (id in knownSessionIds) kept[id] = text else dropped = true
+        }
+        return if (dropped) FollowUpDrafts(kept) else this
+    }
+
     fun encode(): ArrayList<String> {
         val flat = ArrayList<String>(bySession.size * 2)
         bySession.forEach { (id, text) ->

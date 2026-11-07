@@ -306,10 +306,11 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 
 ## 37. 启动时清理无主跟进草稿
 
-- 状态：agent-ready
+- 状态：done
 - 优先级：P2
 - 标签：remote、ux
-- 说明：读取跟进草稿文件时，丢掉会话 id 已经不在当前会话列表里的条目。不要在日志里打印草稿正文。本条只记账，本轮不实现。
+- 分支：`cursor/prune-orphan-drafts-8257`
+- 说明：读取跟进草稿文件时，丢掉会话 id 已经不在当前会话列表里的条目。不要在日志里打印草稿正文。会话存储打不开时不清理。压缩提交已在 `main` 的 `7998b21613ccefb0c56ea74d3b167195f99bd5c0`。Reviewer PASS 的 tip 是 `5594cbe332881b0ac43613d2b73b9791d3b8d54d`。PR #26 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
 ## 下一步建议
 

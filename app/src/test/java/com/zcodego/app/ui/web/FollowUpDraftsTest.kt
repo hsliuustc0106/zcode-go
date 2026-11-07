@@ -52,6 +52,19 @@ class FollowUpDraftsTest {
     }
 
     @Test
+    fun retainDropsUnknownSessionsWithoutLoggingText() {
+        val drafts = FollowUpDrafts.empty()
+            .write("home", "家里的跟进")
+            .write("gone", "已经删掉的跟进")
+            .retain(setOf("home"))
+        assertEquals("家里的跟进", drafts.read("home"))
+        assertEquals("", drafts.read("gone"))
+        assertEquals("FollowUpDrafts(sessions=1)", drafts.toString())
+        assertFalse(drafts.toString().contains("跟进"))
+        assertFalse(drafts.toString().contains("https://"))
+    }
+
+    @Test
     fun clearingDropsEveryDraft() {
         val drafts = FollowUpDrafts.empty()
             .write("home", "家里的跟进")

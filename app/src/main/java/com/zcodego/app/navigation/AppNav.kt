@@ -94,7 +94,17 @@ fun AppNav(
     val snackbar = remember { SnackbarHostState() }
     var openingLink by remember { mutableStateOf(false) }
     val followUpDraftFiles = remember { FollowUpDraftFiles(context.applicationContext.filesDir) }
-    var followUpDrafts by remember { mutableStateOf(followUpDraftFiles.load()) }
+    var followUpDrafts by remember {
+        mutableStateOf(
+            followUpDraftFiles.load(
+                knownSessionIds = if (controller.storageFailed.value) {
+                    null
+                } else {
+                    controller.sessions.value.mapTo(linkedSetOf()) { it.id }
+                },
+            ),
+        )
+    }
 
     fun replaceFollowUpDrafts(next: FollowUpDrafts) {
         followUpDrafts = next
