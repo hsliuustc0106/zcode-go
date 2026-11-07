@@ -192,6 +192,28 @@ Origin 没有 Issues。这份清单是 zcode-go 的看板。开发流程见 [AGE
 - 分支：`cursor/about-release-link-8257`
 - 说明：关于页保留一个清楚的动作，用系统浏览器打开 https://github.com/hsliuustc0106/zcode-go/releases 。不要放进 WebView 允许列表。若入口已经存在，只核对文案是否一眼能懂。压缩提交已在 `main` 的 `928ede6d96ccf0b7aeabd6d8e975997bfac5be52`。Reviewer PASS 的 tip 是 `65c44c253d0c70e8b12db471e748a216e6bfc8f0`。PR #11 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
 
+## 23. 远程页返回键先关跟进栏再退出
+
+- 状态：done
+- 优先级：P1
+- 标签：remote、ux
+- 分支：`cursor/followup-back-8257`
+- 说明：远程页按系统返回键时，如果「跟进」栏是展开的，先把它收起；否则仍按现在的方式返回。不自动发送跟进文字。手机仍只是控制界面。压缩提交已在 `main` 的 `6824bcc4da05e3fa933820e273d45326a958d251`。Reviewer PASS 的 tip 是 `b62de7bc6a5d66ce09ffb459816d2305d6d2d49a`。PR #12 在压缩之后关闭；Origin 的合并接口拒绝了这个 token。
+
+## 24. 会话切换后标题栏显示自定义名
+
+- 状态：agent-ready
+- 优先级：P1
+- 标签：remote、ux
+- 说明：多会话切换后，顶栏和「当前」标记使用用户设置的显示名；没有自定义名时回到链接里的原名。本条只记账，本轮不实现。
+
+## 25. 设置里一键清除全部远控站点数据
+
+- 状态：agent-ready
+- 优先级：P2
+- 标签：remote、security
+- 说明：设置里增加一个动作，确认后清掉远控源站在 WebView 里的站点数据。文案写明这不会删除已保存的会话列表。本条只记账，本轮不实现。
+
 ## 下一步建议
 
 真机或模拟器上按这个顺序点一遍即可。没有设备时，单元测试和 `assembleDebug` 不能代替这些步骤。

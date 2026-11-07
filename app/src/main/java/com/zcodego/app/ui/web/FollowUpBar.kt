@@ -30,11 +30,12 @@ import com.zcodego.app.remote.InsertOutcome
 
 @Composable
 internal fun FollowUpBar(
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
     onInsert: (String, (InsertOutcome) -> Unit) -> Unit,
     onMessage: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    var expanded by rememberSaveable { mutableStateOf(false) }
     var draft by rememberSaveable { mutableStateOf("") }
     var inserting by rememberSaveable { mutableStateOf(false) }
     val inserted = stringResource(R.string.followup_inserted)
@@ -47,7 +48,7 @@ internal fun FollowUpBar(
                 .padding(horizontal = 12.dp, vertical = 4.dp),
         ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = { expanded = !expanded }) {
+                TextButton(onClick = { onExpandedChange(!expanded) }) {
                     Text(stringResource(if (expanded) R.string.followup_collapse else R.string.followup_open))
                 }
             }

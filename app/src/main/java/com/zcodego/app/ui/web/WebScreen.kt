@@ -54,6 +54,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,6 +117,7 @@ fun WebScreen(
     var progress by remember { mutableIntStateOf(0) }
     var showSwitcher by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
+    var followUpExpanded by rememberSaveable { mutableStateOf(false) }
     var sawOffline by remember { mutableStateOf(false) }
     val reconnectShot = remember { ReconnectOnce.Holder() }
     val online = rememberNetworkAvailable()
@@ -213,7 +215,9 @@ fun WebScreen(
     }
 
     BackHandler {
-        if (fatal != null) {
+        if (FollowUpBack.consume(keepAlive && fatal == null, followUpExpanded)) {
+            followUpExpanded = false
+        } else if (fatal != null) {
             onBack()
         } else if (webView.canGoBack()) {
             webView.goBack()
@@ -335,6 +339,8 @@ fun WebScreen(
         }
             if (keepAlive && fatal == null) {
                 FollowUpBar(
+                    expanded = followUpExpanded,
+                    onExpandedChange = { followUpExpanded = it },
                     onInsert = { text, done ->
                         val started = runCatching {
                             webView.evaluateJavascript(FollowUpInsert.script(text)) { raw ->
